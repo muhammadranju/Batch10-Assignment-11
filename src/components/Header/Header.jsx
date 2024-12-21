@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Swal from "sweetalert"; // For SweetAlert
+import { Tooltip } from "react-tooltip";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -87,7 +88,7 @@ const Header = () => {
               <div className="flex items-center space-x-4">
                 <Link
                   to="/"
-                  className="lg:text-3xl text-xl font-extrabold text-blue-600"
+                  className="lg:text-3xl text-xl font-extrabold text-blue-600 -ml-4"
                 >
                   Artifacts<span className="text-gray-800">Tracker</span>
                 </Link>
@@ -136,6 +137,36 @@ const Header = () => {
             </ul>
           </div>
           <div className="navbar-end space-x-2">
+            <details className="dropdown">
+              <summary className="btn m-1 bg-transparent border-none hover:bg-transparent shadow-none">
+                <div
+                  className="dropdown bg-white/70 rounded-full tooltip tooltip-bottom"
+                  data-tooltip-id="my-tooltip"
+                >
+                  <img
+                    src="https://avatars.githubusercontent.com/u/80270685?v=4"
+                    className="lg:w-14 w-12  rounded-full  p-1"
+                    alt=""
+                  />
+                </div>
+                <Tooltip id="my-tooltip">
+                  <h3 className="text-lg font-semibold text-gray-100">
+                    Muhammad Ranju
+                  </h3>
+                  <p className="mt-1">Click to open menu</p>
+                </Tooltip>
+              </summary>
+              <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] lg:ml-0 -ml-28 w-52 p-2 shadow">
+                <li className="text-gray-700 hover:text-blue-600 font-medium text-center">
+                  <p className="text-center lg:text-lg font-semibold hover:bg-transparent">
+                    Muhammad Ranju
+                  </p>
+                </li>
+                <li>
+                  <button className="btn mt-1  ">Log Out</button>
+                </li>
+              </ul>
+            </details>
             <Link
               to={"/login"}
               className="border-2 border-gray-500/50 text-gray-800 py-3 rounded-lg hover:opacity-90 hover:shadow-lg transition-shadow w-fit px-5 "
@@ -145,7 +176,7 @@ const Header = () => {
 
             <Link
               to={"/register"}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg shadow-lg hover:opacity-90 w-fit px-5 "
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg shadow-lg hover:opacity-90 w-fit px-5 lg:flex hidden"
             >
               Register
             </Link>
