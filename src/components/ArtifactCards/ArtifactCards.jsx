@@ -4,7 +4,7 @@ const ArtifactCards = () => {
   return (
     <>
       {/* Featured Artifacts Section */}
-      <section className="container mx-auto px-6 py-16">
+      <section className="w-11/12 lg:w-11/12 md:w-11/12 xl:container  mx-auto px-6 py-16">
         <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-12">
           Featured Artifacts
         </h2>
