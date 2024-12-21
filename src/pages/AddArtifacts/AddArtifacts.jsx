@@ -63,7 +63,7 @@ const AddArtifact = () => {
             htmlFor="artifactName"
             className="block text-gray-700 font-medium"
           >
-            Artifact Name
+            Artifact Name<span className="text-red-600">*</span>
           </label>
           <input
             type="text"
@@ -78,7 +78,7 @@ const AddArtifact = () => {
         {/* Artifact Image URL */}
         <div>
           <label htmlFor="imageUrl" className="block text-gray-700 font-medium">
-            Artifact Image URL
+            Artifact Image URL<span className="text-red-600">*</span>
           </label>
           <input
             type="url"
@@ -96,7 +96,7 @@ const AddArtifact = () => {
             htmlFor="artifactType"
             className="block text-gray-700 font-medium"
           >
-            Artifact Type
+            Artifact Type<span className="text-red-600">*</span>
           </label>
           <select
             id="artifactType"
@@ -119,7 +119,7 @@ const AddArtifact = () => {
             htmlFor="historicalContext"
             className="block text-gray-700 font-medium"
           >
-            Historical Context
+            Historical Context<span className="text-red-600">*</span>
           </label>
           <textarea
             id="historicalContext"
@@ -137,7 +137,7 @@ const AddArtifact = () => {
             htmlFor="createdAt"
             className="block text-gray-700 font-medium"
           >
-            Created At
+            Created At<span className="text-red-600">*</span>
           </label>
           <input
             type="text"
@@ -155,7 +155,7 @@ const AddArtifact = () => {
             htmlFor="discoveredAt"
             className="block text-gray-700 font-medium"
           >
-            Discovered At
+            Discovered At<span className="text-red-600">*</span>
           </label>
           <input
             type="text"
@@ -173,7 +173,7 @@ const AddArtifact = () => {
             htmlFor="discoveredBy"
             className="block text-gray-700 font-medium"
           >
-            Discovered By
+            Discovered By<span className="text-red-600">*</span>
           </label>
           <input
             type="text"
@@ -191,7 +191,7 @@ const AddArtifact = () => {
             htmlFor="presentLocation"
             className="block text-gray-700 font-medium"
           >
-            Present Location
+            Present Location<span className="text-red-600">*</span>
           </label>
           <input
             type="text"
