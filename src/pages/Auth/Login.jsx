@@ -29,7 +29,7 @@ const Login = () => {
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              Email Address
+              Email Address<span className="text-red-600">*</span>
             </label>
             <input
               type="email"
@@ -46,7 +46,7 @@ const Login = () => {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
-              Password
+              Password<span className="text-red-600">*</span>
             </label>
             <input
               type={passwordVisible ? "text" : "password"}

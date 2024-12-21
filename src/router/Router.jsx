@@ -43,7 +43,7 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "artifacts/:id",
+        path: "artifact/:id",
         element: <ArtifactDetails />,
       },
       {

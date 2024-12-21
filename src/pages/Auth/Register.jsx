@@ -84,7 +84,7 @@ const RegisterPage = () => {
               htmlFor="name"
               className="block text-sm font-medium text-gray-700"
             >
-              Full Name
+              Full Name<span className="text-red-600">*</span>
             </label>
             <input
               type="text"
@@ -103,7 +103,7 @@ const RegisterPage = () => {
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              Email Address
+              Email Address<span className="text-red-600">*</span>
             </label>
             <input
               type="email"
@@ -122,7 +122,7 @@ const RegisterPage = () => {
               htmlFor="photoURL"
               className="block text-sm font-medium text-gray-700"
             >
-              Photo URL
+              Photo URL<span className="text-red-600">*</span>
             </label>
             <input
               type="text"
@@ -141,7 +141,7 @@ const RegisterPage = () => {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
-              Password
+              Password<span className="text-red-600">*</span>
             </label>
             <input
               type={passwordVisible ? "text" : "password"}
