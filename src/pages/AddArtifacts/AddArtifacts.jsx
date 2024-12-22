@@ -1,11 +1,13 @@
-/* eslint-disable no-unused-vars */
 import { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
 import Swal from "sweetalert"; // For SweetAlert
 import { AuthContext } from "../../context/AuthProvider";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const AddArtifact = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     artifactName: "",
@@ -19,15 +21,6 @@ const AddArtifact = () => {
     name: user?.displayName,
     email: user?.email,
   });
-
-  const [artifactName, setArtifactName] = useState("");
-  const [imageUrl, setImageUrlsetImageUrl] = useState("");
-  const [artifactType, setArtifactType] = useState("Tools");
-  const [historicalContext, setHistoricalContext] = useState("");
-  const [createdAt, setCreatedAt] = useState("");
-  const [discoveredAt, setDiscoveredAt] = useState("");
-  const [discoveredBy, setDiscoveredBy] = useState("");
-  const [presentLocation, setPresentLocation] = useState("");
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -59,15 +52,40 @@ const AddArtifact = () => {
       return;
     }
 
-    // Simulating API call to store the artifact (replace with actual API call)
     try {
-      // await api.addArtifact(newArtifact); // Uncomment and replace with actual API call
-      Swal("Success", "Artifact added successfully!", "success");
+      const sendData = await fetch(
+        `${import.meta.env.VITE_BackendURL}/api/artifacts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await sendData.json();
+
+      if (sendData.ok) {
+        Swal("Success", "Artifact added successfully!", "success");
+        navigate("/artifacts");
+      } else {
+        Swal(
+          `Error: ${data.message}`,
+          "Failed to add artifact. Please try again.",
+          "error"
+        );
+      }
     } catch (error) {
-      Swal("Error", "Failed to add artifact. Please try again.", "error");
+      Swal(
+        `Error: ${error.message}`,
+        "Failed to add artifact. Please try again.",
+        "error"
+      );
     }
   };
-  console.log(formData);
+  // console.log(formData);
 
   return (
     <div className="max-w-4xl mx-auto p-6 mt-20 bg-white rounded-lg lg:shadow-lg mb-20 ">
@@ -130,7 +148,19 @@ const AddArtifact = () => {
             <option value="Weapons">Weapons</option>
             <option value="Documents">Documents</option>
             <option value="Writings">Writings</option>
+            <option value="Statue">Statue</option>
+            <option value="Sculpture">Sculpture</option>
+            <option value="Stone Tablet">Stone Tablet</option>
+            <option value="Painting">Painting</option>
+            <option value="Mask">Mask</option>
+            <option value="Cup">Cup</option>
+            <option value="Textile">Textile</option>
+            <option value="Architecture">Architecture</option>
+            <option value="Religious Cloth">Religious Cloth</option>
             <option value="Art">Art</option>
+            <option value="Treasure">Treasure</option>
+            <option value="Helmet">Helmet</option>
+            <option value="Statue">Statue</option>
             {/* Add more options as needed */}
           </select>
         </div>
@@ -260,7 +290,7 @@ const AddArtifact = () => {
         <div className="flex justify-center mt-6">
           <button
             type="submit"
-            className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-3 rounded-lg shadow-md hover:opacity-90"
+            className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-20 py-2 rounded-md hover:opacity-90"
           >
             Add Artifact
           </button>
