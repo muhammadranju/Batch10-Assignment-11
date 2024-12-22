@@ -1,20 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import { useParams } from "react-router-dom";
+import Cookies from "js-cookie";
+import toast from "react-hot-toast";
 
 const ArtifactDetails = () => {
   const [liked, setLiked] = useState(false);
+  // const [likes, setLikes] = useState(0);
+  const [artifact, setArtifact] = useState({});
+  const { id } = useParams();
 
-  // Placeholder data for the artifact
-  const artifact = {
-    title: "Ancient Vase",
-    image:
-      "https://assets.editorial.aetnd.com/uploads/2012/05/this-day-in-history-07-19-1799-rosetta-stone-found.jpg", // Replace with actual artifact image
-    description:
-      "A beautiful ancient vase dating back to the 12th century. It is a symbol of craftsmanship and cultural heritage.",
-    creator: "John Doe",
-    creationDate: "1200 AD",
-    material: "Ceramic",
-  };
+  useEffect(() => {
+    const getArtifact = async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_BackendURL}/api/artifacts/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      setArtifact(data.data);
+      setLiked(data.data.likes > 0);
+    };
+    getArtifact();
+  }, []);
 
   const toggleLike = () => setLiked(!liked);
 
@@ -26,10 +39,10 @@ const ArtifactDetails = () => {
 
       <div className="max-w-5xl w-full bg-white/20 rounded-lg shadow-xl overflow-hidden">
         {/* Image Section */}
-        <div className="w-full h-full lg:h-[500px] bg-gray-200 relative">
+        <div className="w-full h-full  bg-gray-200 relative">
           <img
-            src={artifact.image}
-            alt={artifact.title}
+            src={artifact?.imageUrl}
+            alt={artifact?.artifactName}
             className="w-full h-full object-cover"
           />
           <button
@@ -45,30 +58,50 @@ const ArtifactDetails = () => {
 
         {/* Content Section */}
         <div className="p-8">
-          <h1 className="text-3xl font-bold text-gray-800">{artifact.title}</h1>
+          <h1 className="text-3xl font-bold text-gray-800">
+            {artifact?.artifactName}
+          </h1>
           <p className="mt-4 text-gray-600 leading-relaxed">
-            {artifact.description}
+            {artifact?.historicalContext}
           </p>
         </div>
 
         {/* Metadata Section */}
         <div className="px-8 py-6 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-gray-500">Creator</p>
+            <p className="text-sm text-gray-500">Creation Date</p>
             <p className="text-lg text-gray-800 font-medium">
-              {artifact.creator}
+              {artifact?.createdAt}
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">Creation Date</p>
+            <p className="text-sm text-gray-500">Discovered Date</p>
             <p className="text-lg text-gray-800 font-medium">
-              {artifact.creationDate}
+              {artifact?.discoveredAt}
             </p>
           </div>
           <div>
             <p className="text-sm text-gray-500">Material</p>
             <p className="text-lg text-gray-800 font-medium">
-              {artifact.material}
+              {artifact?.artifactType}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Discovered By</p>
+            <p className="text-lg text-gray-800 font-medium">
+              {artifact?.discoveredBy}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Present Location</p>
+            <p className="text-lg text-gray-800 font-medium">
+              {artifact?.presentLocation}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Artifact Added By</p>
+            <p className="text-lg text-gray-800 font-medium">
+              {artifact?.addedBy?.name}
             </p>
           </div>
         </div>
@@ -85,7 +118,13 @@ const ArtifactDetails = () => {
           >
             <span>{liked ? "Dislike ❤️" : "Liked  ♡"}</span>
           </button>
-          <button className="px-6 py-2 bg-gray-200 text-gray-700 font-medium rounded-md hover:bg-gray-300 transition duration-300">
+          <button
+            onClick={() => {
+              window.navigator.clipboard.writeText(window.location.href);
+              toast.success("Copied to clipboard!");
+            }}
+            className="px-6 py-2 bg-gray-200 text-gray-700 font-medium rounded-md hover:bg-gray-300 transition duration-300"
+          >
             Share
           </button>
         </div>
