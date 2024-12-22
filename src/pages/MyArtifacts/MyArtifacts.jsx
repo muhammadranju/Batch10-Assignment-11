@@ -3,6 +3,7 @@ import { useState } from "react";
 import Swal from "sweetalert"; // For SweetAlert
 
 import { IoMdClose } from "react-icons/io";
+import { Helmet } from "react-helmet";
 
 const MyArtifacts = () => {
   // Dummy Data for Artifacts added by the logged-in user
@@ -10,7 +11,7 @@ const MyArtifacts = () => {
     {
       id: 1,
       name: "Ancient Sword",
-      image: "https://via.placeholder.com/300x200",
+      image: "https://cdn.audleytravel.com/-/-/79/527793-terracotta-army.jpg",
       type: "Weapon",
       createdAt: "500 BC",
       discoveredAt: "1234",
@@ -20,7 +21,8 @@ const MyArtifacts = () => {
     {
       id: 2,
       name: "Royal Scroll",
-      image: "https://via.placeholder.com/300x200",
+      image:
+        "https://assets.editorial.aetnd.com/uploads/2012/05/this-day-in-history-07-19-1799-rosetta-stone-found.jpg",
       type: "Document",
       createdAt: "200 BC",
       discoveredAt: "1500",
@@ -87,6 +89,9 @@ const MyArtifacts = () => {
 
   return (
     <div className="py-16 px-6 w-11/12 lg:w-11/12 md:w-11/12 xl:container mx-auto ">
+      <Helmet>
+        <title>My Artifacts Page | Historical Artifacts</title>
+      </Helmet>
       <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-12">
         My Artifacts
       </h1>
@@ -107,7 +112,7 @@ const MyArtifacts = () => {
               <img
                 src={artifact.image}
                 alt={artifact.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-64 object-cover"
               />
               <div className="p-4">
                 <h3 className="text-xl font-semibold text-gray-800">
@@ -124,21 +129,23 @@ const MyArtifacts = () => {
                   Location: {artifact.location}
                 </p>
 
-                {/* Update Button */}
-                <button
-                  onClick={() => handleUpdateClick(artifact)}
-                  className="mt-4 text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  Update
-                </button>
+                <div className="flex justify-between items-center mt-4 ">
+                  {/* Update Button */}
+                  <button
+                    onClick={() => handleUpdateClick(artifact)}
+                    className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-3 rounded-md hover:opacity-90"
+                  >
+                    Update
+                  </button>
 
-                {/* Delete Button */}
-                <button
-                  onClick={() => handleDeleteClick(artifact.id)}
-                  className="mt-4 ml-4 text-red-600 hover:text-red-800 font-medium"
-                >
-                  Delete
-                </button>
+                  {/* Delete Button */}
+                  <button
+                    onClick={() => handleDeleteClick(artifact.id)}
+                    className="bg-gradient-to-r from-red-500 to-red-800 text-white px-4 py-3 rounded-md hover:opacity-90"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -264,7 +271,7 @@ const MyArtifacts = () => {
               {/* Update Button */}
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-800"
+                className="w-full bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-3 rounded-md hover:opacity-90"
               >
                 Update Artifact
               </button>

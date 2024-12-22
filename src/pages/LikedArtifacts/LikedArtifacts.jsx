@@ -1,6 +1,8 @@
-import { NavLink } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 
 const LikedArtifacts = () => {
+  const navigate = useNavigate();
   // Dummy Data for Liked Artifacts
   const likedArtifacts = [
     {
@@ -30,19 +32,23 @@ const LikedArtifacts = () => {
     {
       id: 5,
       title: "Golden Statue",
-      image: "https://via.placeholder.com/300x200",
+      image: "https://cdn.audleytravel.com/-/-/79/527793-terracotta-army.jpg",
       description: "A small golden statue representing an ancient deity.",
     },
     {
       id: 6,
       title: "Bronze Sword",
-      image: "https://via.placeholder.com/300x200",
+      image:
+        "https://assets.editorial.aetnd.com/uploads/2012/05/this-day-in-history-07-19-1799-rosetta-stone-found.jpg",
       description: "A bronze sword, beautifully preserved through centuries.",
     },
   ];
 
   return (
     <div className="py-16 px-6 w-11/12 lg:w-11/12 md:w-11/12 xl:container mx-auto ">
+      <Helmet>
+        <title>Liked Artifacts Page | Historical Artifacts</title>
+      </Helmet>
       <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-12">
         Liked Artifacts
       </h1>
@@ -57,19 +63,20 @@ const LikedArtifacts = () => {
             <img
               src={artifact.image}
               alt={artifact.title}
-              className="w-full h-48 object-cover"
+              className="w-full h-64 object-cover"
             />
-            <div className="p-4">
+            <div className="p-4 space-y-2">
               <h3 className="text-xl font-semibold text-gray-800">
                 {artifact.title}
               </h3>
               <p className="text-gray-600 mt-2">{artifact.description}</p>
-              <NavLink
+              <button
+                onClick={() => navigate(`/artifact/${artifact.id}`)}
                 to={`/artifact/${artifact.id}`}
-                className="mt-4 inline-block text-blue-600 hover:text-blue-800 font-medium"
+                className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-3 rounded-md hover:opacity-90  "
               >
                 View Details
-              </NavLink>
+              </button>
             </div>
           </div>
         ))}

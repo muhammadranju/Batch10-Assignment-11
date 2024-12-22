@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 import Swal from "sweetalert"; // For SweetAlert
 
 const AddArtifact = () => {
@@ -52,7 +54,10 @@ const AddArtifact = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 mt-10 bg-white rounded-lg shadow-lg">
+    <div className="max-w-4xl mx-auto p-6 mt-10 bg-white rounded-lg lg:shadow-lg my-20">
+      <Helmet>
+        <title>Add Artifact Page | Historical Artifacts</title>
+      </Helmet>
       <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">
         Add Artifact
       </h2>

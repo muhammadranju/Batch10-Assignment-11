@@ -5,12 +5,12 @@ const HeroSection = () => {
     <>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white">
-        <div className="w-11/12 lg:w-11/12 md:w-11/12 xl:container  mx-auto px-6 py-16 flex flex-col lg:flex-row items-center">
+        <div className="w-11/12 lg:w-11/12 md:w-11/12 xl:container  mx-auto px-6 py-28 flex flex-col lg:flex-row items-center">
           <div className="lg:w-1/2 text-center lg:text-left">
             <h1 className="text-5xl font-extrabold mb-6 leading-tight">
               Explore the Stories <br /> Behind the Relics
             </h1>
-            <p className="mb-8 text-lg">
+            <p className="mb-8 text-lg w-[80%]">
               Uncover the beauty and history of artifacts worldwide with our
               platform. Contribute and preserve the tales for future
               generations.
@@ -24,7 +24,7 @@ const HeroSection = () => {
           </div>
           <div className="lg:w-1/2 mt-8 lg:mt-0">
             <img
-              src="https://via.placeholder.com/500x350"
+              src="https://www.artlex.com/wp-content/uploads/2022/11/Phaistos-Disc.jpg"
               alt="Hero Image"
               className="rounded-lg shadow-lg mx-auto"
             />

@@ -1,16 +1,20 @@
+import { Helmet } from "react-helmet";
 import ArtifactCards from "../../components/ArtifactCards/ArtifactCards";
 import HeroSection from "../../components/HeroSection/HeroSection";
 
 const Home = () => {
   return (
-    <div className=" text-gray-800">
+    <>
+      <Helmet>
+        <title>Home Page | Historical Artifacts</title>
+      </Helmet>
       {/* Navbar */}
 
       <HeroSection />
       <ArtifactCards />
 
       {/* Join Community Section */}
-      <section className="bg-gradient-to-r from-yellow-100 via-pink-50 to-yellow-100 py-16">
+      <section className="bg-gradient-to-r from-yellow-100 via-pink-50 to-yellow-100 py-28">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-extrabold text-gray-800 mb-6">
             Join Our Community
@@ -29,7 +33,7 @@ const Home = () => {
       </section>
 
       {/* Mission Statement Section */}
-      <section className="py-16">
+      <section className="my-28 ">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-extrabold text-gray-800 mb-6">
             Our Mission
@@ -40,9 +44,7 @@ const Home = () => {
           </p>
         </div>
       </section>
-
-      {/* Footer */}
-    </div>
+    </>
   );
 };
 

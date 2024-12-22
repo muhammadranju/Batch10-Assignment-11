@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -10,7 +11,10 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-purple-100 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-purple-100 flex items-center justify-center lg:px-0 px-3">
+      <Helmet>
+        <title>Login Page | Historical Artifacts</title>
+      </Helmet>
       <div className="bg-white shadow-2xl rounded-lg max-w-lg w-full p-8 sm:p-12">
         {/* Logo */}
         <div className="text-center mb-8">

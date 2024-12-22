@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 
 const ArtifactDetails = () => {
   const [liked, setLiked] = useState(false);
@@ -6,119 +7,89 @@ const ArtifactDetails = () => {
   // Placeholder data for the artifact
   const artifact = {
     title: "Ancient Vase",
-    image: "https://via.placeholder.com/600x400", // Replace with artifact image
+    image:
+      "https://assets.editorial.aetnd.com/uploads/2012/05/this-day-in-history-07-19-1799-rosetta-stone-found.jpg", // Replace with actual artifact image
     description:
       "A beautiful ancient vase dating back to the 12th century. It is a symbol of craftsmanship and cultural heritage.",
     creator: "John Doe",
     creationDate: "1200 AD",
     material: "Ceramic",
-    additionalImages: [
-      "https://via.placeholder.com/400x300",
-      "https://via.placeholder.com/400x300",
-      "https://via.placeholder.com/400x300",
-    ],
-    comments: [
-      { user: "Alice", text: "Amazing craftsmanship!" },
-      { user: "Bob", text: "Such a beautiful piece of history." },
-    ],
   };
 
   const toggleLike = () => setLiked(!liked);
 
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col">
-      {/* Header */}
+    <div className="bg-gray-100 flex flex-col justify-center items-center py-16 lg:px-0 px-3  ">
+      <Helmet>
+        <title>Artifact Details Page | Historical Artifacts</title>
+      </Helmet>
 
-      {/* Hero Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center">
-          <div className="lg:w-1/2 w-full">
-            <img
-              src={artifact.image}
-              alt={artifact.title}
-              className="rounded-lg shadow-lg w-full object-cover"
-            />
+      <div className="max-w-5xl w-full bg-white/20 rounded-lg shadow-xl overflow-hidden">
+        {/* Image Section */}
+        <div className="w-full h-full lg:h-[500px] bg-gray-200 relative">
+          <img
+            src={artifact.image}
+            alt={artifact.title}
+            className="w-full h-full object-cover"
+          />
+          <button
+            className={`absolute top-4 right-4 p-2 rounded-full ${
+              liked
+                ? "bg-red-400 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            } shadow-md transition duration-300`}
+          >
+            {liked ? "❤️" : "♡"}
+          </button>
+        </div>
+
+        {/* Content Section */}
+        <div className="p-8">
+          <h1 className="text-3xl font-bold text-gray-800">{artifact.title}</h1>
+          <p className="mt-4 text-gray-600 leading-relaxed">
+            {artifact.description}
+          </p>
+        </div>
+
+        {/* Metadata Section */}
+        <div className="px-8 py-6 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <p className="text-sm text-gray-500">Creator</p>
+            <p className="text-lg text-gray-800 font-medium">
+              {artifact.creator}
+            </p>
           </div>
-          <div className="lg:w-1/2 w-full mt-8 lg:mt-0 lg:ml-12">
-            <h2 className="text-4xl font-extrabold text-gray-900">
-              {artifact.title}
-            </h2>
-            <p className="text-lg text-gray-600 mt-4">{artifact.description}</p>
-            <div className="mt-6 flex space-x-4">
-              <button
-                onClick={toggleLike}
-                className={`px-6 py-2 rounded-full ${
-                  liked ? "bg-blue-600 text-white" : "bg-gray-300 text-gray-700"
-                } hover:bg-blue-700 transition duration-300`}
-              >
-                {liked ? "Liked" : "Like"}
-              </button>
-              <button className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full hover:opacity-90 transition duration-300">
-                Add to Collection
-              </button>
-            </div>
+          <div>
+            <p className="text-sm text-gray-500">Creation Date</p>
+            <p className="text-lg text-gray-800 font-medium">
+              {artifact.creationDate}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Material</p>
+            <p className="text-lg text-gray-800 font-medium">
+              {artifact.material}
+            </p>
           </div>
         </div>
-      </section>
 
-      {/* Details Section */}
-      <section className="bg-gray-50 py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <h3 className="text-3xl font-semibold text-gray-900">Details</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8">
-            <div className="space-y-4">
-              <p>
-                <span className="font-semibold">Creator:</span>{" "}
-                {artifact.creator}
-              </p>
-              <p>
-                <span className="font-semibold">Creation Date:</span>{" "}
-                {artifact.creationDate}
-              </p>
-              <p>
-                <span className="font-semibold">Material:</span>{" "}
-                {artifact.material}
-              </p>
-            </div>
-            <div>
-              <p className="text-lg text-gray-700">{artifact.description}</p>
-            </div>
-          </div>
+        {/* Actions Section */}
+        <div className="px-8 py-6 border-t border-gray-200 flex justify-between items-center">
+          <button
+            onClick={toggleLike}
+            className={`px-6 py-2  text-white font-medium rounded-md hover:bg-blue-700 hover:opacity-90 transition duration-300 ${
+              liked
+                ? "bg-gradient-to-r from-red-500 to-red-800"
+                : "bg-gradient-to-r from-blue-500 to-blue-800"
+            }`}
+          >
+            <span>{liked ? "Dislike ❤️" : "Liked  ♡"}</span>
+          </button>
+          <button className="px-6 py-2 bg-gray-200 text-gray-700 font-medium rounded-md hover:bg-gray-300 transition duration-300">
+            Share
+          </button>
         </div>
-      </section>
-
-      {/* Gallery Section */}
-      <section className="bg-white py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <h3 className="text-3xl font-semibold text-gray-900">Gallery</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-            {artifact.additionalImages.map((image, index) => (
-              <div key={index} className="overflow-hidden rounded-lg shadow-md">
-                <img
-                  src={image}
-                  alt={`Artifact Image ${index + 1}`}
-                  className="w-full h-full object-cover transform transition duration-300 hover:scale-105"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Comments Section */}
-      <section className="bg-gray-50 py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <h3 className="text-3xl font-semibold text-gray-900">Comments</h3>
-          <div className="mt-8 space-y-4">
-            {artifact.comments.map((comment, index) => (
-              <div key={index} className="p-4 bg-white rounded-lg shadow-md">
-                <p className="font-semibold text-gray-800">{comment.user}</p>
-                <p className="text-gray-600">{comment.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 };

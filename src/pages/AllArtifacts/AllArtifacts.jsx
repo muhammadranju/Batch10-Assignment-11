@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const AllArtifacts = () => {
@@ -7,13 +8,15 @@ const AllArtifacts = () => {
     {
       id: 1,
       title: "Ancient Vase",
-      image: "https://via.placeholder.com/300x200",
+      image:
+        "https://assets.editorial.aetnd.com/uploads/2012/05/this-day-in-history-07-19-1799-rosetta-stone-found.jpg",
       description: "A beautiful ancient vase dating back to the 12th century.",
     },
     {
       id: 2,
       title: "Gold Necklace",
-      image: "https://via.placeholder.com/300x200",
+      image:
+        "https://www.artlex.com/wp-content/uploads/2022/11/Phaistos-Disc.jpg",
       description: "A gold necklace adorned with precious stones.",
     },
     {
@@ -45,6 +48,9 @@ const AllArtifacts = () => {
   return (
     <div className=" flex flex-col pb-10">
       {/* Main Content */}
+      <Helmet>
+        <title>All Artifact Page | Historical Artifacts</title>
+      </Helmet>
       <div className="py-16 px-6">
         <div className="w-11/12 lg:w-11/12 md:w-11/12 xl:container  mx-auto">
           <h1 className="text-4xl font-extrabold text-gray-900 text-center">
@@ -83,22 +89,17 @@ const AllArtifacts = () => {
                 <img
                   src={artifact.image}
                   alt={artifact.title}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-64 object-cover"
                 />
                 <div className="p-4">
                   <h3 className="text-xl font-semibold text-gray-800">
                     {artifact.title}
                   </h3>
                   <p className="text-gray-600 mt-2">{artifact.description}</p>
-                  {/* <NavLink
-                    to={`/artifacts/${artifact.id}`}
-                    className="mt-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium"
-                  >
-                    View Details
-                  </NavLink> */}
+
                   <button
                     onClick={() => navigate(`/artifact/${artifact.id}`)}
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-md hover:opacity-90 mt-2"
+                    className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-2 rounded-md hover:opacity-90 mt-2"
                   >
                     View Details
                   </button>
