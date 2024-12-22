@@ -1,8 +1,16 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { toast } from "react-hot-toast";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthProvider";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../../firebase/firebase.config";
 // import "react-toastify/dist/ReactToastify.css";
 
 // Initialize toast notifications
@@ -16,7 +24,9 @@ const RegisterPage = () => {
     password: "",
   });
 
+  const { user, setLoading, setRefetch } = useContext(AuthContext);
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const navigate = useNavigate();
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -46,7 +56,7 @@ const RegisterPage = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, photoURL, password } = formData;
 
@@ -59,9 +69,49 @@ const RegisterPage = () => {
       return;
     }
 
-    // Mock registration logic
-    toast.success("Registration successful!");
-    console.log("User Registered: ", { name, email, photoURL });
+    try {
+      const userData = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(auth.currentUser, {
+        displayName: name,
+        photoURL: photoURL,
+      });
+      setRefetch(Date.now());
+
+      if (userData) {
+        navigate("/");
+        setLoading(false);
+        toast.success("User Created Successfully!");
+      }
+    } catch (error) {
+      if (error.message.includes("auth/email-already-in-use")) {
+        toast.error("Email already in use!");
+      }
+    }
+
+    // // Mock registration logic
+    // toast.success("Registration successful!");
+    // console.log("User Registered: ", { name, email, photoURL });
+  };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  const handelGoogleRegister = async () => {
+    const googleProvider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      if (error.message.includes("auth/popup-closed-by-user")) {
+        toast.error("Login Failed! Please try again.");
+      }
+    }
   };
 
   return (
@@ -97,7 +147,6 @@ const RegisterPage = () => {
               value={formData.name}
               onChange={handleChange}
               className="mt-2 w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
 
@@ -116,7 +165,6 @@ const RegisterPage = () => {
               value={formData.email}
               onChange={handleChange}
               className="mt-2 w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
 
@@ -135,7 +183,6 @@ const RegisterPage = () => {
               value={formData.photoURL}
               onChange={handleChange}
               className="mt-2 w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
-              required
             />
           </div>
 
@@ -154,7 +201,6 @@ const RegisterPage = () => {
               value={formData.password}
               onChange={handleChange}
               className="mt-2 w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
-              required
             />
             <button
               type="button"
@@ -180,7 +226,10 @@ const RegisterPage = () => {
 
         {/* Social Register */}
         <div className="flex justify-center items-center space-x-4">
-          <button className="bg-gray-200  hover:bg-gray-300 w-full text-center text-gray-700 px-6 py-3 rounded-lg shadow-md flex items-center justify-center">
+          <button
+            onClick={handelGoogleRegister}
+            className="bg-gray-200  hover:bg-gray-300 w-full text-center text-gray-700 px-6 py-3 rounded-lg shadow-md flex items-center justify-center"
+          >
             <img
               src="https://img.icons8.com/color/48/google-logo.png"
               alt="Google"

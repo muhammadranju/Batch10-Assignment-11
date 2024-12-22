@@ -1,13 +1,64 @@
-import { useState } from "react";
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
+import { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
+import toast from "react-hot-toast";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthProvider";
+import { auth } from "../../firebase/firebase.config";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const { setLoading } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
+  };
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password } = formData;
+
+    if (!email || !password) {
+      toast.error("All fields are required!");
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      setLoading(false);
+      toast.success("User login Successfully!");
+      navigate(location.state ? location.state : "/");
+    } catch (error) {
+      if (error.message.includes("auth/invalid-credential")) {
+        toast.error("Invalid Credentials Email/Password!");
+      }
+    }
+  };
+
+  const handelGoogleLogin = async () => {
+    const googleProvider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate(location.state ? location.state : "/");
+    } catch (error) {
+      if (error.message.includes("auth/popup-closed-by-user")) {
+        toast.error("Login Failed! Please try again.");
+      }
+    }
   };
 
   return (
@@ -26,7 +77,7 @@ const Login = () => {
         </div>
 
         {/* Login Form */}
-        <form>
+        <form onSubmit={handleSubmit}>
           {/* Email Field */}
           <div className="mb-6">
             <label
@@ -38,9 +89,10 @@ const Login = () => {
             <input
               type="email"
               id="email"
+              value={formData.email}
+              onChange={handleChange}
               placeholder="Enter your email"
               className="mt-2 w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              required
             />
           </div>
 
@@ -55,9 +107,10 @@ const Login = () => {
             <input
               type={passwordVisible ? "text" : "password"}
               id="password"
+              value={formData.password}
+              onChange={handleChange}
               placeholder="Enter your password"
               className="mt-2 w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              required
             />
             <button
               type="button"
@@ -84,7 +137,10 @@ const Login = () => {
 
         {/* Social Login */}
         <div className="flex justify-center items-center space-x-4">
-          <button className="bg-gray-200  hover:bg-gray-300 w-full text-center text-gray-700 px-6 py-3 rounded-lg shadow-md flex items-center justify-center">
+          <button
+            onClick={handelGoogleLogin}
+            className="bg-gray-200  hover:bg-gray-300 w-full text-center text-gray-700 px-6 py-3 rounded-lg shadow-md flex items-center justify-center"
+          >
             <img
               src="https://img.icons8.com/color/48/google-logo.png"
               alt="Google"
