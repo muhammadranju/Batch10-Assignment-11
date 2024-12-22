@@ -1,25 +1,26 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Swal from "sweetalert"; // For SweetAlert
 import { Tooltip } from "react-tooltip";
+import { AuthContext } from "../../context/AuthProvider";
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { user, signOut } = useContext(AuthContext);
 
   const handleLogout = async () => {
     try {
-      Swal.fire("Logged Out", "You have successfully logged out.", "success");
-      history.push("/"); // Redirect to homepage after logout
+      Swal("Logged Out", "You have successfully logged out.", "success");
+      signOut();
+      // history.push("/"); // Redirect to homepage after logout
     } catch (error) {
-      Swal.fire("Error", "Failed to log out. Please try again.", "error");
+      Swal("Error", "Failed to log out. Please try again.", "error");
     }
   };
 
   return (
     <header className="shadow-md sticky top-0 z-50 backdrop-blur-md bg-opacity-70 bg-white/70">
-      <nav className="w-11/12 lg:w-11/12 md:w-11/12 xl:container mx-auto flex justify-between items-center lg:py-2 py-3 m ">
+      <nav className="w-11/12 lg:w-11/12 md:w-11/12 xl:container mx-auto flex justify-between items-center lg:py-2   ">
         <div className="navbar ">
           <div className="navbar-start">
             <div className="dropdown">
@@ -63,25 +64,31 @@ const Header = () => {
                     All Artifacts
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink
-                    to="/add-artifact"
-                    className="text-gray-700 hover:text-blue-600 font-medium"
-                  >
-                    Add Artifact
-                  </NavLink>
-                </li>
-                <li>
-                  <a>My Profile</a>
-                  <ul className="p-2 space-y-1 w-48">
+                {user && (
+                  <>
                     <li>
-                      <NavLink to={"/my-artifacts"}>My Artifacts</NavLink>
+                      <NavLink
+                        to="/add-artifact"
+                        className="text-gray-700 hover:text-blue-600 font-medium"
+                      >
+                        Add Artifact
+                      </NavLink>
                     </li>
                     <li>
-                      <NavLink to={"/liked-artifacts"}>Liked Artifacts</NavLink>
+                      <a>My Profile</a>
+                      <ul className="p-2 space-y-1 w-48">
+                        <li>
+                          <NavLink to={"/my-artifacts"}>My Artifacts</NavLink>
+                        </li>
+                        <li>
+                          <NavLink to={"/liked-artifacts"}>
+                            Liked Artifacts
+                          </NavLink>
+                        </li>
+                      </ul>
                     </li>
-                  </ul>
-                </li>
+                  </>
+                )}
               </ul>
             </div>
             <div className="btn btn-ghost lg:text-xl hover:bg-transparent bg-transparent">
@@ -113,73 +120,92 @@ const Header = () => {
                   All Artifacts
                 </NavLink>
               </li>
-              <li>
-                <NavLink
-                  to="/add-artifact"
-                  className="text-gray-700 hover:text-blue-600 font-medium"
-                >
-                  Add Artifact
-                </NavLink>
-              </li>
-              <li>
-                <details>
-                  <summary>My Profile</summary>
-                  <ul className="p-2 space-y-1 w-48">
-                    <li>
-                      <NavLink to={"/my-artifacts"}>My Artifacts</NavLink>
-                    </li>
-                    <li>
-                      <NavLink to={"/liked-artifacts"}>Liked Artifacts</NavLink>
-                    </li>
-                  </ul>
-                </details>
-              </li>
+              {user && (
+                <>
+                  <li>
+                    <NavLink
+                      to="/add-artifact"
+                      className="text-gray-700 hover:text-blue-600 font-medium"
+                    >
+                      Add Artifact
+                    </NavLink>
+                  </li>
+                  <li>
+                    <details>
+                      <summary>My Profile</summary>
+                      <ul className="p-2 space-y-1 w-48">
+                        <li>
+                          <NavLink to={"/my-artifacts"}>My Artifacts</NavLink>
+                        </li>
+                        <li>
+                          <NavLink to={"/liked-artifacts"}>
+                            Liked Artifacts
+                          </NavLink>
+                        </li>
+                      </ul>
+                    </details>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
           <div className="navbar-end space-x-2">
-            <details className="dropdown">
-              <summary className="btn m-1 bg-transparent border-none hover:bg-transparent shadow-none">
-                <div
-                  className="dropdown bg-white/70 rounded-full tooltip tooltip-bottom"
-                  data-tooltip-id="my-tooltip"
+            {user ? (
+              <details className="dropdown">
+                <summary className="btn m-1 bg-transparent border-none hover:bg-transparent shadow-none">
+                  <div
+                    className="dropdown bg-white/70 rounded-full tooltip tooltip-bottom"
+                    data-tooltip-id="my-tooltip"
+                  >
+                    <img
+                      src={
+                        user.photoURL ||
+                        "https://avatars.githubusercontent.com/u/80270685?v=4"
+                      }
+                      className="lg:w-14 w-14  rounded-full  p-1"
+                      alt=""
+                    />
+                  </div>
+                  <Tooltip id="my-tooltip">
+                    <h3 className="text-lg font-semibold text-gray-100">
+                      {user.displayName || "User Name"}
+                    </h3>
+                    <p className="mt-1">Click to open menu</p>
+                  </Tooltip>
+                </summary>
+                <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] lg:ml-0 -ml-28 w-52 p-2 shadow">
+                  <li className="text-gray-700 hover:text-blue-600 font-medium text-center">
+                    <p className="text-center lg:text-lg font-semibold hover:bg-transparent">
+                      {user.displayName || "User Name"}
+                    </p>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="btn mt-1 bg-red-500 text-white hover:bg-red-700 "
+                    >
+                      Log Out
+                    </button>
+                  </li>
+                </ul>
+              </details>
+            ) : (
+              <>
+                <Link
+                  to={"/login"}
+                  className="border-2 border-gray-500/50 text-gray-800 py-3 rounded-lg hover:opacity-90 hover:shadow-lg transition-shadow w-fit px-5 "
                 >
-                  <img
-                    src="https://avatars.githubusercontent.com/u/80270685?v=4"
-                    className="lg:w-14 w-12  rounded-full  p-1"
-                    alt=""
-                  />
-                </div>
-                <Tooltip id="my-tooltip">
-                  <h3 className="text-lg font-semibold text-gray-100">
-                    Muhammad Ranju
-                  </h3>
-                  <p className="mt-1">Click to open menu</p>
-                </Tooltip>
-              </summary>
-              <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] lg:ml-0 -ml-28 w-52 p-2 shadow">
-                <li className="text-gray-700 hover:text-blue-600 font-medium text-center">
-                  <p className="text-center lg:text-lg font-semibold hover:bg-transparent">
-                    Muhammad Ranju
-                  </p>
-                </li>
-                <li>
-                  <button className="btn mt-1  ">Log Out</button>
-                </li>
-              </ul>
-            </details>
-            <Link
-              to={"/login"}
-              className="border-2 border-gray-500/50 text-gray-800 py-3 rounded-lg hover:opacity-90 hover:shadow-lg transition-shadow w-fit px-5 "
-            >
-              Login
-            </Link>
+                  Login
+                </Link>
 
-            <Link
-              to={"/register"}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg shadow-lg hover:opacity-90 w-fit px-5 lg:flex hidden"
-            >
-              Register
-            </Link>
+                <Link
+                  to={"/register"}
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg shadow-lg hover:opacity-90 w-fit px-5 lg:flex hidden"
+                >
+                  Register
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
