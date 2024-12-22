@@ -39,10 +39,14 @@ const Login = () => {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      setLoading(false);
-      toast.success("User login Successfully!");
-      navigate(location.state ? location.state : "/");
+      const isUser = await signInWithEmailAndPassword(auth, email, password);
+      if (isUser) {
+        setLoading(false);
+        toast.success("User login Successfully!");
+        navigate(location.state ? location.state : "/");
+      } else {
+        toast.error("Invalid Credentials Email/Password!");
+      }
     } catch (error) {
       if (error.message.includes("auth/invalid-credential")) {
         toast.error("Invalid Credentials Email/Password!");
@@ -54,11 +58,11 @@ const Login = () => {
     const googleProvider = new GoogleAuthProvider();
     try {
       const googleUser = await signInWithPopup(auth, googleProvider);
-      const { email } = googleUser.user;
+      const { email, displayName, photoURL } = googleUser.user;
 
       if (googleUser) {
         const userData = await fetch(
-          `${import.meta.env.VITE_BackendURL}api/auth/login`,
+          `${import.meta.env.VITE_BackendURL}/api/auth/login`,
           {
             method: "POST",
             headers: {
@@ -66,14 +70,18 @@ const Login = () => {
             },
             body: JSON.stringify({
               email: email,
+              name: displayName,
+              photoURL: photoURL,
             }),
           }
         );
         const user = await userData.json();
+
         console.log(user);
+
         Cookies.set("token", user?.token, { expires: 15 });
+        navigate(location.state ? location.state : "/");
       }
-      navigate(location.state ? location.state : "/");
     } catch (error) {
       if (error.message.includes("auth/popup-closed-by-user")) {
         toast.error("Login Failed! Please try again.");
