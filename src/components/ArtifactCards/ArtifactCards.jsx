@@ -4,7 +4,7 @@ const ArtifactCards = () => {
   return (
     <>
       {/* Featured Artifacts Section */}
-      <section className="w-11/12 lg:w-11/12 md:w-11/12 xl:container  mx-auto px-6 py-16">
+      <section className="w-11/12 lg:w-11/12 md:w-11/12 xl:container  mx-auto px-6 py-24">
         <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-12">
           Featured Artifacts
         </h2>
@@ -17,9 +17,9 @@ const ArtifactCards = () => {
                 className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition"
               >
                 <img
-                  src="https://via.placeholder.com/250x150"
+                  src="https://assets.editorial.aetnd.com/uploads/2012/05/this-day-in-history-07-19-1799-rosetta-stone-found.jpg"
                   alt="Artifact"
-                  className="rounded-lg mb-4"
+                  className="rounded-lg mb-4 w-full h-64 object-cover"
                 />
                 <h3 className="text-2xl font-semibold text-gray-800">
                   Artifact Name
@@ -30,9 +30,12 @@ const ArtifactCards = () => {
                 </p>
                 <div className="flex justify-between items-center mt-4">
                   <span className="text-gray-700 font-medium">Likes: 42</span>
-                  <button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-md hover:opacity-90">
+                  <Link
+                    to={`/artifact/${index}`}
+                    className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-2 rounded-md hover:opacity-90"
+                  >
                     View Details
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
