@@ -5,7 +5,7 @@ const HeroSection = () => {
     <>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white">
-        <div className="w-11/12 lg:w-11/12 md:w-11/12 xl:container  mx-auto px-6 py-28 flex flex-col lg:flex-row items-center">
+        <div className="w-11/12 lg:w-11/12 md:w-11/12 xl:container  mx-auto px-6 py-14 flex  lg:flex-row items-center flex-col-reverse">
           <div className="lg:w-1/2 text-center lg:text-left">
             <h1 className="text-5xl font-extrabold mb-6 leading-tight">
               Explore the Stories <br /> Behind the Relics
@@ -22,11 +22,11 @@ const HeroSection = () => {
               Explore Artifacts
             </Link>
           </div>
-          <div className="lg:w-1/2 mt-8 lg:mt-0">
+          <div className="lg:w-1/2 my-8 lg:mt-0">
             <img
               src="https://www.artlex.com/wp-content/uploads/2022/11/Phaistos-Disc.jpg"
               alt="Hero Image"
-              className="rounded-lg shadow-lg mx-auto"
+              className="rounded-lg shadow-lg mx-auto w-full"
             />
           </div>
         </div>

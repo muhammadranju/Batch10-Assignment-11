@@ -43,7 +43,7 @@ const ArtifactCards = () => {
         <div className="text-center mt-12">
           <Link
             to="/artifacts"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg shadow-lg hover:opacity-90"
+            className="bg-gradient-to-r from-blue-500 to-blue-800 text-white py-3 px-10 rounded-md hover:opacity-90"
           >
             See All
           </Link>
