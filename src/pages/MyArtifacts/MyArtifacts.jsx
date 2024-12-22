@@ -7,44 +7,22 @@ import Cookies from "js-cookie";
 import { AuthContext } from "../../context/AuthProvider";
 
 const MyArtifacts = () => {
-  const { user } = useContext(AuthContext);
+  const { user, setRefetch, setLoading } = useContext(AuthContext);
 
   // Dummy Data for Artifacts added by the logged-in user
   const [userArtifacts, setUserArtifacts] = useState([]);
-  // const userArtifacts = [
-  //   {
-  //     id: 1,
-  //     name: "Ancient Sword",
-  //     image: "https://cdn.audleytravel.com/-/-/79/527793-terracotta-army.jpg",
-  //     type: "Weapon",
-  //     createdAt: "500 BC",
-  //     discoveredAt: "1234",
-  //     discoveredBy: "Explorer John",
-  //     location: "Museum of History",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Royal Scroll",
-  //     image:
-  //       "https://assets.editorial.aetnd.com/uploads/2012/05/this-day-in-history-07-19-1799-rosetta-stone-found.jpg",
-  //     type: "Document",
-  //     createdAt: "200 BC",
-  //     discoveredAt: "1500",
-  //     discoveredBy: "Explorer Jane",
-  //     location: "National Library",
-  //   },
-  // ];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentArtifact, setCurrentArtifact] = useState(null);
   const [updatedData, setUpdatedData] = useState({
-    name: "",
-    image: "",
-    type: "",
+    artifactName: "",
+    imageUrl: "",
+    artifactType: "",
     createdAt: "",
     discoveredAt: "",
+    historicalContext: "",
     discoveredBy: "",
-    location: "",
+    presentLocation: "",
   });
 
   useEffect(() => {
@@ -61,10 +39,10 @@ const MyArtifacts = () => {
         }
       );
       const data = await response.json();
-      console.log(data);
       setUserArtifacts(data.data);
     };
     getArtifacts();
+    setRefetch(Date.now());
   }, []);
 
   // Handle Update Button Click
@@ -81,10 +59,36 @@ const MyArtifacts = () => {
       title: "Are you sure?",
       text: "Once deleted, this artifact cannot be recovered!",
       icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
-    }).then((willDelete) => {
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      try {
+        if (willDelete) {
+          setLoading(true);
+          const sendDeleteRequest = await fetch(
+            `${import.meta.env.VITE_BackendURL}/api/artifacts/${artifactId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
+            }
+          );
+          const data = await sendDeleteRequest.json();
+          // Update the artifact in the state
+          setUserArtifacts((prevArtifacts) =>
+            prevArtifacts.filter((artifact) => artifact._id !== artifactId)
+          );
+          Swal("Deleted!", "Your artifact has been deleted.", "success");
+        } else {
+          Swal("Cancelled", "Your artifact has not been deleted.", "error");
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+
       if (willDelete) {
         // Simulate deleting the artifact
         Swal("Deleted!", "Your artifact has been deleted.", "success");
@@ -103,14 +107,61 @@ const MyArtifacts = () => {
   };
 
   // Handle Update Submission
-  const handleUpdateSubmit = (e) => {
+  // Handle Update Submission
+  const handleUpdateSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
 
-    console.log(currentArtifact);
-    // Simulate successful update
-    Swal("Updated!", "Your artifact has been updated.", "success");
-    setIsModalOpen(false);
-    // Logic for updating the artifact data in your database should go here
+    try {
+      const sendUpdateRequest = await fetch(
+        `${import.meta.env.VITE_BackendURL}/api/artifacts/${
+          currentArtifact.slug
+        }`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+          body: JSON.stringify({
+            artifactName: updatedData.artifactName,
+            imageUrl: updatedData.imageUrl,
+            artifactType: updatedData.artifactType,
+            historicalContext: updatedData.historicalContext,
+            createdAt: updatedData.createdAt,
+            discoveredAt: updatedData.discoveredAt,
+            discoveredBy: updatedData.discoveredBy,
+            presentLocation: updatedData.presentLocation,
+          }),
+        }
+      );
+
+      const data = await sendUpdateRequest.json();
+
+      if (sendUpdateRequest.ok) {
+        // Update the artifact in the state
+        setUserArtifacts((prevArtifacts) =>
+          prevArtifacts.map((artifact) =>
+            artifact.slug === currentArtifact.slug
+              ? { ...artifact, ...data.artifact }
+              : artifact
+          )
+        );
+
+        Swal("Updated!", "Your artifact has been updated.", "success");
+        setIsModalOpen(false); // Close the modal
+      } else {
+        Swal(
+          `Error: ${data.message}`,
+          "Failed to update artifact. Please try again.",
+          "error"
+        );
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Update Error:", error);
+      Swal("Error", "Something went wrong. Please try again.", "error");
+    }
   };
 
   return (
@@ -169,7 +220,7 @@ const MyArtifacts = () => {
 
                   {/* Delete Button */}
                   <button
-                    onClick={() => handleDeleteClick(artifact.id)}
+                    onClick={() => handleDeleteClick(artifact.slug)}
                     className="bg-gradient-to-r from-red-500 to-red-800 text-white px-4 py-3 rounded-md hover:opacity-90"
                   >
                     Delete
@@ -201,33 +252,45 @@ const MyArtifacts = () => {
               </label>
               <input
                 type="text"
-                id="name"
-                name="name"
+                id="artifactName"
+                name="artifactName"
                 value={updatedData.artifactName}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded mb-4"
               />
-
               {/* Artifact Image URL */}
               <label className="block text-gray-700 mb-2" htmlFor="image">
                 Artifact Image (valid URL)
               </label>
               <input
                 type="url"
-                id="image"
-                name="image"
+                id="imageUrl"
+                name="imageUrl"
                 value={updatedData.imageUrl}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded mb-4"
               />
-
-              {/* Artifact Type */}
+              `{" "}
+              <label className="block text-gray-700 mb-2" htmlFor="image">
+                Artifact Image (valid URL)
+              </label>
+              <textarea
+                type="url"
+                id="imageUrl"
+                name="imageUrl"
+                value={updatedData.historicalContext}
+                onChange={handleInputChange}
+                cols={40}
+                rows={4}
+                className="w-full p-2 border border-gray-300 rounded mb-4"
+              ></textarea>
+              `{/* Artifact Type */}
               <label className="block text-gray-700 mb-2" htmlFor="type">
                 Artifact Type
               </label>
               <select
-                id="type"
-                name="type"
+                id="artifactType"
+                name="artifactType"
                 value={updatedData.artifactType}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded mb-4"
@@ -238,7 +301,6 @@ const MyArtifacts = () => {
                 <option value="Writing">Writing</option>
                 {/* Add more options as needed */}
               </select>
-
               <div className="flex justify-between items-center gap-x-5">
                 {/* Created At */}
                 <div>
@@ -276,7 +338,6 @@ const MyArtifacts = () => {
                   />
                 </div>
               </div>
-
               <div className="flex justify-between items-center gap-x-5">
                 {/* Discovered By */}
 
@@ -308,8 +369,8 @@ const MyArtifacts = () => {
                   </label>
                   <input
                     type="text"
-                    id="location"
-                    name="location"
+                    id="presentLocation"
+                    name="presentLocation"
                     value={updatedData.presentLocation}
                     onChange={handleInputChange}
                     className="w-full p-2 border border-gray-300 rounded mb-4"

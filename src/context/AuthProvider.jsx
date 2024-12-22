@@ -19,7 +19,6 @@ const AuthProvider = ({ children }) => {
     logOut(auth);
     setLoading(false);
     Cookies.remove("token");
-    // Cookies.remove("isLoggedIn");
   };
 
   useEffect(() => {
