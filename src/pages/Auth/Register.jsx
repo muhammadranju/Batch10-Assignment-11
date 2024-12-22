@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
+import Cookies from "js-cookie";
 
 import {
   createUserWithEmailAndPassword,
@@ -21,7 +22,7 @@ const RegisterPage = () => {
     password: "",
   });
 
-  const { user, setLoading, setRefetch, signOut } = useContext(AuthContext);
+  const { user, setLoading, setRefetch } = useContext(AuthContext);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -93,7 +94,6 @@ const RegisterPage = () => {
         navigate("/login");
         setLoading(false);
         toast.success("User Created Successfully!");
-        signOut();
       }
     } catch (error) {
       if (error.message.includes("auth/email-already-in-use")) {
@@ -131,10 +131,10 @@ const RegisterPage = () => {
 
         const user = await userData.json();
         console.log(user);
-        // Cookies.set("token", user?.token, { expires: 15 });
+        Cookies.set("token", user?.token, { expires: 15 });
         toast.success("User Registered Successfully!");
-        signOut();
-        navigate("/login");
+
+        navigate();
       }
       console.log(googleUser);
     } catch (error) {
