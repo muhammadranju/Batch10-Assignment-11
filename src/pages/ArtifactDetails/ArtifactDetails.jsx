@@ -5,11 +5,11 @@ import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 
 const ArtifactDetails = () => {
-  const [liked, setLiked] = useState(false);
-  // const [likes, setLikes] = useState(0);
+  const [liked, setLiked] = useState(false); // Track the like state
   const [artifact, setArtifact] = useState({});
   const { id } = useParams();
 
+  // Fetch the artifact data when the component mounts
   useEffect(() => {
     const getArtifact = async () => {
       const response = await fetch(
@@ -24,28 +24,67 @@ const ArtifactDetails = () => {
       const data = await response.json();
       console.log(data);
       setArtifact(data.data);
-      setLiked(data.data.likes > 0);
+      // setLiked(data.data.likes > 0); // Set liked state based on the likes count
     };
     getArtifact();
-  }, []);
+  }, [id]);
 
-  const toggleLike = () => setLiked(!liked);
+  // Toggle like/dislike when the button is clicked
+  const toggleLike = async () => {
+    try {
+      // Toggle the like status
+      const newLikedState = !liked;
+      setLiked(newLikedState); // Update the UI immediately
+
+      // Send the updated like state to the backend
+      const response = await fetch(
+        `${import.meta.env.VITE_BackendURL}/api/artifacts/${id}`,
+        {
+          method: "PATCH", // Ensure the method is PATCH
+          headers: {
+            "Content-Type": "application/json", // This should be correct
+            Authorization: `Bearer ${Cookies.get("token")}`, // Ensure this header is set correctly
+          },
+          body: JSON.stringify({
+            liked: newLikedState, // Send updated state
+          }),
+        }
+      );
+
+      const data = await response.json();
+      console.log(data);
+      if (data.success) {
+        // If backend update is successful, show a success message
+        toast.success("Like status updated successfully");
+      } else {
+        // Revert the UI if something went wrong on the backend
+        setLiked(!newLikedState);
+        toast.error("Error updating like status");
+      }
+    } catch (error) {
+      console.error("Error toggling like status", error);
+      // Revert the UI in case of any error
+      setLiked(!liked);
+      toast.error("Error occurred while updating like status");
+    }
+  };
 
   return (
-    <div className="bg-gray-100 flex flex-col justify-center items-center py-16 lg:px-0 px-3  ">
+    <div className="bg-gray-100 flex flex-col justify-center items-center py-16 lg:px-0 px-3">
       <Helmet>
         <title>Artifact Details Page | Historical Artifacts</title>
       </Helmet>
 
       <div className="max-w-5xl w-full bg-white/20 rounded-lg shadow-xl overflow-hidden">
         {/* Image Section */}
-        <div className="w-full h-full  bg-gray-200 relative">
+        <div className="w-full h-full bg-gray-200 relative">
           <img
             src={artifact?.imageUrl}
             alt={artifact?.artifactName}
             className="w-full h-full object-cover"
           />
           <button
+            onClick={toggleLike}
             className={`absolute top-4 right-4 p-2 rounded-full ${
               liked
                 ? "bg-red-400 text-white"
@@ -110,13 +149,13 @@ const ArtifactDetails = () => {
         <div className="px-8 py-6 border-t border-gray-200 flex justify-between items-center">
           <button
             onClick={toggleLike}
-            className={`px-6 py-2  text-white font-medium rounded-md hover:bg-blue-700 hover:opacity-90 transition duration-300 ${
+            className={`px-6 py-2 text-white font-medium rounded-md hover:bg-blue-700 hover:opacity-90 transition duration-300 ${
               liked
                 ? "bg-gradient-to-r from-red-500 to-red-800"
                 : "bg-gradient-to-r from-blue-500 to-blue-800"
             }`}
           >
-            <span>{liked ? "Dislike ❤️" : "Liked  ♡"}</span>
+            <span>{liked ? "Dislike ❤️" : "Like  ♡"}</span>
           </button>
           <button
             onClick={() => {
