@@ -59,8 +59,8 @@ const MyArtifacts = () => {
       showCancelButton: true,
       confirmButtonText: "Yes, delete it!",
       cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
+    }).then((willDelete) => {
+      if (willDelete) {
         // Simulate deleting the artifact
         Swal("Deleted!", "Your artifact has been deleted.", "success");
         // Logic for deleting the artifact from the database goes here
@@ -82,7 +82,7 @@ const MyArtifacts = () => {
     e.preventDefault();
 
     // Simulate successful update
-    Swal.fire("Updated!", "Your artifact has been updated.", "success");
+    Swal("Updated!", "Your artifact has been updated.", "success");
     setIsModalOpen(false);
     // Logic for updating the artifact data in your database should go here
   };

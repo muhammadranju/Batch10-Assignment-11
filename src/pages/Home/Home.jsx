@@ -1,8 +1,12 @@
 import { Helmet } from "react-helmet";
 import ArtifactCards from "../../components/ArtifactCards/ArtifactCards";
 import HeroSection from "../../components/HeroSection/HeroSection";
+import { AuthContext } from "../../context/AuthProvider";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
+  const { user } = useContext(AuthContext);
   return (
     <>
       <Helmet>
@@ -23,12 +27,12 @@ const Home = () => {
             Connect with like-minded enthusiasts and contribute to the
             preservation of history.
           </p>
-          <a
-            href="/register"
+          <Link
+            to={user ? "/artifacts" : "/register"}
             className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-8 py-3 rounded-lg shadow-lg hover:opacity-90"
           >
-            Register Now
-          </a>
+            {user ? "Explore Artifacts" : "Register Now"}
+          </Link>
         </div>
       </section>
 
