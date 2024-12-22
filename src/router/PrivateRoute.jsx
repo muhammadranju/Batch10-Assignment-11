@@ -24,6 +24,8 @@ const PrivateRoutes = ({ children }) => {
       </div>
     );
 
+  console.log(user);
+
   if (!user) {
     return <Navigate state={location.pathname} to="/login" replace={true} />;
   }

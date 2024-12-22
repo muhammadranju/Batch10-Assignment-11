@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
+
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -11,10 +12,6 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../../firebase/firebase.config";
-// import "react-toastify/dist/ReactToastify.css";
-
-// Initialize toast notifications
-// toast.configure();
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +21,7 @@ const RegisterPage = () => {
     password: "",
   });
 
-  const { user, setLoading, setRefetch } = useContext(AuthContext);
+  const { user, setLoading, setRefetch, signOut } = useContext(AuthContext);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -80,21 +77,29 @@ const RegisterPage = () => {
         photoURL: photoURL,
       });
       setRefetch(Date.now());
-
+      console.log(userData);
       if (userData) {
-        navigate("/");
+        await fetch(`${import.meta.env.VITE_BackendURL}/api/auth/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: userData.user.displayName,
+            email: userData.user.email,
+            photoURL: userData.user.photoURL,
+          }),
+        });
+        navigate("/login");
         setLoading(false);
         toast.success("User Created Successfully!");
+        signOut();
       }
     } catch (error) {
       if (error.message.includes("auth/email-already-in-use")) {
         toast.error("Email already in use!");
       }
     }
-
-    // // Mock registration logic
-    // toast.success("Registration successful!");
-    // console.log("User Registered: ", { name, email, photoURL });
   };
 
   useEffect(() => {
@@ -106,11 +111,37 @@ const RegisterPage = () => {
   const handelGoogleRegister = async () => {
     const googleProvider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, googleProvider);
+      const googleUser = await signInWithPopup(auth, googleProvider);
+      const { displayName, email, photoURL } = googleUser.user; // Correct properties
+      if (googleUser) {
+        const userData = await fetch(
+          `${import.meta.env.VITE_BackendURL}/api/auth/register`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: displayName,
+              email: email,
+              photoURL: photoURL,
+            }),
+          }
+        );
+
+        const user = await userData.json();
+        console.log(user);
+        // Cookies.set("token", user?.token, { expires: 15 });
+        toast.success("User Registered Successfully!");
+        signOut();
+        navigate("/login");
+      }
+      console.log(googleUser);
     } catch (error) {
       if (error.message.includes("auth/popup-closed-by-user")) {
         toast.error("Login Failed! Please try again.");
       }
+      console.error(error); // Always good to log errors for debugging
     }
   };
 

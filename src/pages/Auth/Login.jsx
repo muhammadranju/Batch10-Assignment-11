@@ -10,6 +10,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
 import { auth } from "../../firebase/firebase.config";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -52,7 +53,26 @@ const Login = () => {
   const handelGoogleLogin = async () => {
     const googleProvider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, googleProvider);
+      const googleUser = await signInWithPopup(auth, googleProvider);
+      const { email } = googleUser.user;
+
+      if (googleUser) {
+        const userData = await fetch(
+          `${import.meta.env.VITE_BackendURL}api/auth/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: email,
+            }),
+          }
+        );
+        const user = await userData.json();
+        console.log(user);
+        Cookies.set("token", user?.token, { expires: 15 });
+      }
       navigate(location.state ? location.state : "/");
     } catch (error) {
       if (error.message.includes("auth/popup-closed-by-user")) {
