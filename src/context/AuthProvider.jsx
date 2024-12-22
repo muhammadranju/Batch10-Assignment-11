@@ -2,6 +2,7 @@
 import { createContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signOut as logOut } from "firebase/auth";
 import { auth } from "../firebase/firebase.config";
+import Cookies from "js-cookie";
 
 export const AuthContext = createContext(null);
 
@@ -17,6 +18,7 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     logOut(auth);
     setLoading(false);
+    Cookies.remove("token");
     // Cookies.remove("isLoggedIn");
   };
 
