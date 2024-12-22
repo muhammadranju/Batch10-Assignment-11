@@ -1,11 +1,27 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
 import Swal from "sweetalert"; // For SweetAlert
+import { AuthContext } from "../../context/AuthProvider";
 
 const AddArtifact = () => {
+  const { user } = useContext(AuthContext);
+
+  const [formData, setFormData] = useState({
+    artifactName: "",
+    imageUrl: "",
+    artifactType: "",
+    historicalContext: "",
+    createdAt: "",
+    discoveredAt: "",
+    discoveredBy: "",
+    presentLocation: "",
+    name: user?.displayName,
+    email: user?.email,
+  });
+
   const [artifactName, setArtifactName] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrlsetImageUrl] = useState("");
   const [artifactType, setArtifactType] = useState("Tools");
   const [historicalContext, setHistoricalContext] = useState("");
   const [createdAt, setCreatedAt] = useState("");
@@ -13,9 +29,23 @@ const AddArtifact = () => {
   const [discoveredBy, setDiscoveredBy] = useState("");
   const [presentLocation, setPresentLocation] = useState("");
 
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Validation (e.g., check if fields are filled, valid URL for image)
+    const {
+      artifactName,
+      imageUrl,
+      historicalContext,
+      createdAt,
+      discoveredAt,
+      discoveredBy,
+      presentLocation,
+    } = formData;
     if (
       !artifactName ||
       !imageUrl ||
@@ -29,32 +59,18 @@ const AddArtifact = () => {
       return;
     }
 
-    const newArtifact = {
-      artifactName,
-      imageUrl,
-      artifactType,
-      historicalContext,
-      createdAt,
-      discoveredAt,
-      discoveredBy,
-      presentLocation,
-      adderName: "John Doe",
-      adderEmail: "johndoe@example.com",
-      likeCount: 0, // initial like count
-    };
-
     // Simulating API call to store the artifact (replace with actual API call)
     try {
       // await api.addArtifact(newArtifact); // Uncomment and replace with actual API call
-      Swal.fire("Success", "Artifact added successfully!", "success");
-      history.push("/artifacts"); // Redirect to artifacts list page or wherever needed
+      Swal("Success", "Artifact added successfully!", "success");
     } catch (error) {
-      Swal.fire("Error", "Failed to add artifact. Please try again.", "error");
+      Swal("Error", "Failed to add artifact. Please try again.", "error");
     }
   };
+  console.log(formData);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 mt-10 bg-white rounded-lg lg:shadow-lg my-20">
+    <div className="max-w-4xl mx-auto p-6 mt-20 bg-white rounded-lg lg:shadow-lg mb-20 ">
       <Helmet>
         <title>Add Artifact Page | Historical Artifacts</title>
       </Helmet>
@@ -73,8 +89,8 @@ const AddArtifact = () => {
           <input
             type="text"
             id="artifactName"
-            value={artifactName}
-            onChange={(e) => setArtifactName(e.target.value)}
+            value={formData.artifactName}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter artifact name"
           />
@@ -88,8 +104,8 @@ const AddArtifact = () => {
           <input
             type="url"
             id="imageUrl"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
+            value={formData.imageUrl}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter valid image URL"
           />
@@ -105,10 +121,11 @@ const AddArtifact = () => {
           </label>
           <select
             id="artifactType"
-            value={artifactType}
-            onChange={(e) => setArtifactType(e.target.value)}
+            value={formData.artifactType}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
+            <option>Select Artifact Type</option>
             <option value="Tools">Tools</option>
             <option value="Weapons">Weapons</option>
             <option value="Documents">Documents</option>
@@ -128,8 +145,8 @@ const AddArtifact = () => {
           </label>
           <textarea
             id="historicalContext"
-            value={historicalContext}
-            onChange={(e) => setHistoricalContext(e.target.value)}
+            value={formData.historicalContext}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter historical context of the artifact"
             rows="4"
@@ -137,75 +154,80 @@ const AddArtifact = () => {
         </div>
 
         {/* Created At */}
-        <div>
-          <label
-            htmlFor="createdAt"
-            className="block text-gray-700 font-medium"
-          >
-            Created At<span className="text-red-600">*</span>
-          </label>
-          <input
-            type="text"
-            id="createdAt"
-            value={createdAt}
-            onChange={(e) => setCreatedAt(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="e.g., 100 BC"
-          />
-        </div>
 
-        {/* Discovered At */}
-        <div>
-          <label
-            htmlFor="discoveredAt"
-            className="block text-gray-700 font-medium"
-          >
-            Discovered At<span className="text-red-600">*</span>
-          </label>
-          <input
-            type="text"
-            id="discoveredAt"
-            value={discoveredAt}
-            onChange={(e) => setDiscoveredAt(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="e.g., 1799"
-          />
+        <div className="flex justify-between items-center gap-x-5">
+          <div className="w-full">
+            <label
+              htmlFor="createdAt"
+              className="block text-gray-700 font-medium"
+            >
+              Created At<span className="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              id="createdAt"
+              value={formData.createdAt}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g., 100 BC"
+            />
+          </div>
+
+          {/* Discovered At */}
+          <div className="w-full">
+            <label
+              htmlFor="discoveredAt"
+              className="block text-gray-700 font-medium"
+            >
+              Discovered At<span className="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              id="discoveredAt"
+              value={formData.discoveredAt}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g., 1799"
+            />
+          </div>
         </div>
 
         {/* Discovered By */}
-        <div>
-          <label
-            htmlFor="discoveredBy"
-            className="block text-gray-700 font-medium"
-          >
-            Discovered By<span className="text-red-600">*</span>
-          </label>
-          <input
-            type="text"
-            id="discoveredBy"
-            value={discoveredBy}
-            onChange={(e) => setDiscoveredBy(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter name of the person who discovered"
-          />
-        </div>
+        <div className="flex justify-between items-center gap-x-5">
+          <div className="w-full">
+            <label
+              htmlFor="discoveredBy"
+              className="block text-gray-700 font-medium"
+            >
+              Discovered By<span className="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              id="discoveredBy"
+              value={formData.discoveredBy}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter name of the person who discovered"
+            />
+          </div>
 
-        {/* Present Location */}
-        <div>
-          <label
-            htmlFor="presentLocation"
-            className="block text-gray-700 font-medium"
-          >
-            Present Location<span className="text-red-600">*</span>
-          </label>
-          <input
-            type="text"
-            id="presentLocation"
-            value={presentLocation}
-            onChange={(e) => setPresentLocation(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Where is the artifact located now?"
-          />
+          {/* Present Location */}
+          <div className="w-full">
+            <label
+              htmlFor="presentLocation"
+              className="block text-gray-700 font-medium"
+            >
+              Present Location<span className="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              id="presentLocation"
+              value={formData.presentLocation}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Where is the artifact located now?"
+            />
+          </div>
         </div>
 
         {/* Logged-In User Info (Read-Only) */}
@@ -216,7 +238,7 @@ const AddArtifact = () => {
             </label>
             <input
               type="text"
-              value={"John Doe"}
+              value={user?.displayName}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 cursor-not-allowed"
               readOnly
             />
@@ -227,7 +249,7 @@ const AddArtifact = () => {
             </label>
             <input
               type="email"
-              value={"johndoe@example.com"}
+              value={user?.email}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 cursor-not-allowed"
               readOnly
             />
