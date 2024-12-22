@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { HiSearch } from "react-icons/hi";
 
 const AllArtifacts = () => {
   const navigate = useNavigate();
@@ -57,26 +58,15 @@ const AllArtifacts = () => {
             All Artifacts
           </h1>
           {/* Search and Filter */}
-          <div className="mt-8 mb-12 flex justify-between items-center">
-            <div className="flex items-center space-x-4">
+          <div className="mt-8 mb-12 flex justify-center items-center w-1/2 mx-auto">
+            <label className="input input-bordered flex items-center gap-2">
+              <HiSearch />
               <input
                 type="text"
+                className="grow w-full"
                 placeholder="Search Artifacts..."
-                className="px-4 py-2 border border-gray-300 rounded-lg w-1/2 md:w-1/4"
               />
-              <select className="px-4 py-2 border border-gray-300 rounded-lg">
-                <option>All Categories</option>
-                <option>Vases</option>
-                <option>Necklaces</option>
-                <option>Sculptures</option>
-              </select>
-            </div>
-            <NavLink
-              to="/add-artifact"
-              className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg shadow hover:opacity-90 transition duration-300"
-            >
-              Add Artifact
-            </NavLink>
+            </label>
           </div>
 
           {/* Artifacts Grid */}
