@@ -173,7 +173,7 @@ const Header = () => {
                     <p className="mt-1">Click to open menu</p>
                   </Tooltip>
                 </summary>
-                <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] lg:ml-0 -ml-28 w-52 p-2 shadow">
+                <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] lg:-ml-20 -ml-28 w-52 p-2 shadow">
                   <li className="text-gray-700 hover:text-blue-600 font-medium text-center">
                     <p className="text-center lg:text-lg font-semibold hover:bg-transparent">
                       {user.displayName || "User Name"}
