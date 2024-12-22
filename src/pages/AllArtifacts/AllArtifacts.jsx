@@ -1,51 +1,33 @@
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HiSearch } from "react-icons/hi";
+import { useEffect, useState } from "react";
 
 const AllArtifacts = () => {
-  const navigate = useNavigate();
-  // Dummy Data for Artifacts
-  const artifacts = [
-    {
-      id: 1,
-      title: "Ancient Vase",
-      image:
-        "https://assets.editorial.aetnd.com/uploads/2012/05/this-day-in-history-07-19-1799-rosetta-stone-found.jpg",
-      description: "A beautiful ancient vase dating back to the 12th century.",
-    },
-    {
-      id: 2,
-      title: "Gold Necklace",
-      image:
-        "https://www.artlex.com/wp-content/uploads/2022/11/Phaistos-Disc.jpg",
-      description: "A gold necklace adorned with precious stones.",
-    },
-    {
-      id: 3,
-      title: "Stone Tablet",
-      image: "https://via.placeholder.com/300x200",
-      description: "An old stone tablet with ancient inscriptions.",
-    },
-    {
-      id: 4,
-      title: "Ceramic Pot",
-      image: "https://via.placeholder.com/300x200",
-      description: "A beautifully crafted ceramic pot from ancient times.",
-    },
-    {
-      id: 5,
-      title: "Ancient Sculpture",
-      image: "https://via.placeholder.com/300x200",
-      description: "A marble sculpture depicting a historical figure.",
-    },
-    {
-      id: 6,
-      title: "Golden Artifact",
-      image: "https://via.placeholder.com/300x200",
-      description: "A golden artifact dating back to the early 1500s.",
-    },
-  ];
+  const [artifacts, setArtifacts] = useState([]);
+  // const [search, setSearch] = useState("");
 
+  useEffect(() => {
+    const getArtifacts = async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_BackendURL}/api/artifacts`
+      );
+      const data = await response.json();
+      setArtifacts(data.data);
+    };
+    getArtifacts();
+  }, []);
+
+  const handleSearch = async (e) => {
+    const { value } = e.target;
+    const response = await fetch(
+      `${import.meta.env.VITE_BackendURL}/api/artifacts?search=${value}`
+    );
+    const data = await response.json();
+    setArtifacts(data.data);
+    console.log(data);
+    // setSearch(value);
+  };
   return (
     <div className=" flex flex-col pb-10">
       {/* Main Content */}
@@ -63,6 +45,7 @@ const AllArtifacts = () => {
               <HiSearch />
               <input
                 type="text"
+                onChange={handleSearch}
                 className="grow w-full"
                 placeholder="Search Artifacts..."
               />
@@ -71,28 +54,36 @@ const AllArtifacts = () => {
 
           {/* Artifacts Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {artifacts.map((artifact) => (
+            {artifacts?.map((artifact) => (
               <div
-                key={artifact.id}
+                key={artifact._id}
                 className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105"
               >
                 <img
-                  src={artifact.image}
-                  alt={artifact.title}
+                  src={artifact.imageUrl}
+                  alt={artifact.artifactName}
                   className="w-full h-64 object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    {artifact.title}
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {artifact.artifactName}
                   </h3>
-                  <p className="text-gray-600 mt-2">{artifact.description}</p>
-
-                  <button
-                    onClick={() => navigate(`/artifact/${artifact.id}`)}
-                    className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-2 rounded-md hover:opacity-90 mt-2"
-                  >
-                    View Details
-                  </button>
+                  <p className="text-gray-600 mt-2">
+                    {artifact.historicalContext.length > 50
+                      ? artifact.historicalContext.slice(0, 80) + "..."
+                      : artifact.historicalContext}
+                  </p>
+                  <div className="flex justify-between items-center mt-4">
+                    <span className="text-gray-700 font-medium">
+                      Likes: {artifact?.likes}
+                    </span>
+                    <Link
+                      to={`/artifact/${artifact?.slug}`}
+                      className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-2 rounded-md hover:opacity-90"
+                    >
+                      View Details
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
