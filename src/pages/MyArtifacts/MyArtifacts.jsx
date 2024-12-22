@@ -1,35 +1,39 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Swal from "sweetalert"; // For SweetAlert
-
 import { IoMdClose } from "react-icons/io";
 import { Helmet } from "react-helmet";
+import Cookies from "js-cookie";
+import { AuthContext } from "../../context/AuthProvider";
 
 const MyArtifacts = () => {
+  const { user } = useContext(AuthContext);
+
   // Dummy Data for Artifacts added by the logged-in user
-  const userArtifacts = [
-    {
-      id: 1,
-      name: "Ancient Sword",
-      image: "https://cdn.audleytravel.com/-/-/79/527793-terracotta-army.jpg",
-      type: "Weapon",
-      createdAt: "500 BC",
-      discoveredAt: "1234",
-      discoveredBy: "Explorer John",
-      location: "Museum of History",
-    },
-    {
-      id: 2,
-      name: "Royal Scroll",
-      image:
-        "https://assets.editorial.aetnd.com/uploads/2012/05/this-day-in-history-07-19-1799-rosetta-stone-found.jpg",
-      type: "Document",
-      createdAt: "200 BC",
-      discoveredAt: "1500",
-      discoveredBy: "Explorer Jane",
-      location: "National Library",
-    },
-  ];
+  const [userArtifacts, setUserArtifacts] = useState([]);
+  // const userArtifacts = [
+  //   {
+  //     id: 1,
+  //     name: "Ancient Sword",
+  //     image: "https://cdn.audleytravel.com/-/-/79/527793-terracotta-army.jpg",
+  //     type: "Weapon",
+  //     createdAt: "500 BC",
+  //     discoveredAt: "1234",
+  //     discoveredBy: "Explorer John",
+  //     location: "Museum of History",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Royal Scroll",
+  //     image:
+  //       "https://assets.editorial.aetnd.com/uploads/2012/05/this-day-in-history-07-19-1799-rosetta-stone-found.jpg",
+  //     type: "Document",
+  //     createdAt: "200 BC",
+  //     discoveredAt: "1500",
+  //     discoveredBy: "Explorer Jane",
+  //     location: "National Library",
+  //   },
+  // ];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentArtifact, setCurrentArtifact] = useState(null);
@@ -43,10 +47,31 @@ const MyArtifacts = () => {
     location: "",
   });
 
+  useEffect(() => {
+    const getArtifacts = async () => {
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_BackendURL
+        }/api/artifacts/my-artifacts?userEmail=${user?.email}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      setUserArtifacts(data.data);
+    };
+    getArtifacts();
+  }, []);
+
   // Handle Update Button Click
   const handleUpdateClick = (artifact) => {
     setCurrentArtifact(artifact);
     setUpdatedData({ ...artifact }); // Pre-populate the form with existing data
+
     setIsModalOpen(true); // Open the modal
   };
 
@@ -81,6 +106,7 @@ const MyArtifacts = () => {
   const handleUpdateSubmit = (e) => {
     e.preventDefault();
 
+    console.log(currentArtifact);
     // Simulate successful update
     Swal("Updated!", "Your artifact has been updated.", "success");
     setIsModalOpen(false);
@@ -97,28 +123,30 @@ const MyArtifacts = () => {
       </h1>
 
       {/* Check if user has any artifacts */}
-      {userArtifacts.length === 0 ? (
+      {userArtifacts?.length === 0 ? (
         <div className="text-center text-xl text-gray-600">
           You don&apos;t have any artifacts yet. Add some artifacts to your
           collection!
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {userArtifacts.map((artifact) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 h-full">
+          {userArtifacts?.map((artifact) => (
             <div
-              key={artifact.id}
-              className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105"
+              key={artifact._id}
+              className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 h-full"
             >
               <img
-                src={artifact.image}
-                alt={artifact.name}
+                src={artifact.imageUrl}
+                alt={artifact.artifactName}
                 className="w-full h-64 object-cover"
               />
               <div className="p-4">
                 <h3 className="text-xl font-semibold text-gray-800">
-                  {artifact.name}
+                  {artifact.artifactName}
                 </h3>
-                <p className="text-gray-600 mt-2">Type: {artifact.type}</p>
+                <p className="text-gray-600 mt-2">
+                  Type: {artifact.artifactType}
+                </p>
                 <p className="text-gray-600 mt-2">
                   Created At: {artifact.createdAt}
                 </p>
@@ -126,8 +154,9 @@ const MyArtifacts = () => {
                   Discovered At: {artifact.discoveredAt}
                 </p>
                 <p className="text-gray-600 mt-2">
-                  Location: {artifact.location}
+                  Discovered By: {artifact.discoveredBy}
                 </p>
+                <p className="text-gray-600 mt-2">Likes: {artifact.likes}</p>
 
                 <div className="flex justify-between items-center mt-4 ">
                   {/* Update Button */}
@@ -174,7 +203,7 @@ const MyArtifacts = () => {
                 type="text"
                 id="name"
                 name="name"
-                value={updatedData.name}
+                value={updatedData.artifactName}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded mb-4"
               />
@@ -187,7 +216,7 @@ const MyArtifacts = () => {
                 type="url"
                 id="image"
                 name="image"
-                value={updatedData.image}
+                value={updatedData.imageUrl}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded mb-4"
               />
@@ -199,7 +228,7 @@ const MyArtifacts = () => {
               <select
                 id="type"
                 name="type"
-                value={updatedData.type}
+                value={updatedData.artifactType}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded mb-4"
               >
@@ -210,64 +239,83 @@ const MyArtifacts = () => {
                 {/* Add more options as needed */}
               </select>
 
-              {/* Created At */}
-              <label className="block text-gray-700 mb-2" htmlFor="createdAt">
-                Created At
-              </label>
-              <input
-                type="text"
-                id="createdAt"
-                name="createdAt"
-                value={updatedData.createdAt}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded mb-4"
-              />
+              <div className="flex justify-between items-center gap-x-5">
+                {/* Created At */}
+                <div>
+                  <label
+                    className="block text-gray-700 mb-2"
+                    htmlFor="createdAt"
+                  >
+                    Created At
+                  </label>
+                  <input
+                    type="text"
+                    id="createdAt"
+                    name="createdAt"
+                    value={updatedData.createdAt}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded mb-4"
+                  />
+                </div>
 
-              {/* Discovered At */}
-              <label
-                className="block text-gray-700 mb-2"
-                htmlFor="discoveredAt"
-              >
-                Discovered At
-              </label>
-              <input
-                type="text"
-                id="discoveredAt"
-                name="discoveredAt"
-                value={updatedData.discoveredAt}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded mb-4"
-              />
+                <div>
+                  {/* Discovered At */}
+                  <label
+                    className="block text-gray-700 mb-2"
+                    htmlFor="discoveredAt"
+                  >
+                    Discovered At
+                  </label>
+                  <input
+                    type="text"
+                    id="discoveredAt"
+                    name="discoveredAt"
+                    value={updatedData.discoveredAt}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded mb-4"
+                  />
+                </div>
+              </div>
 
-              {/* Discovered By */}
-              <label
-                className="block text-gray-700 mb-2"
-                htmlFor="discoveredBy"
-              >
-                Discovered By
-              </label>
-              <input
-                type="text"
-                id="discoveredBy"
-                name="discoveredBy"
-                value={updatedData.discoveredBy}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded mb-4"
-              />
+              <div className="flex justify-between items-center gap-x-5">
+                {/* Discovered By */}
 
-              {/* Present Location */}
-              <label className="block text-gray-700 mb-2" htmlFor="location">
-                Present Location
-              </label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                value={updatedData.location}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded mb-4"
-              />
+                <div>
+                  <label
+                    className="block text-gray-700 mb-2"
+                    htmlFor="discoveredBy"
+                  >
+                    Discovered By
+                  </label>
+                  <input
+                    type="text"
+                    id="discoveredBy"
+                    name="discoveredBy"
+                    value={updatedData.discoveredBy}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded mb-4"
+                  />
+                </div>
 
+                <div>
+                  {" "}
+                  {/* Present Location */}
+                  <label
+                    className="block text-gray-700 mb-2"
+                    htmlFor="location"
+                  >
+                    Present Location
+                  </label>
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    value={updatedData.presentLocation}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border border-gray-300 rounded mb-4"
+                  />
+                </div>
+              </div>
               {/* Update Button */}
               <button
                 type="submit"
