@@ -4,6 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 import Swal from "sweetalert"; // For SweetAlert
 import { Tooltip } from "react-tooltip";
 import { AuthContext } from "../../context/AuthProvider";
+import { FaDeviantart } from "react-icons/fa";
 
 const Header = () => {
   const { user, signOut } = useContext(AuthContext);
@@ -95,8 +96,9 @@ const Header = () => {
               <div className="flex items-center space-x-4">
                 <Link
                   to="/"
-                  className="lg:text-3xl text-xl font-extrabold text-blue-600 -ml-4"
+                  className="flex items-center lg:text-3xl text-xl font-extrabold text-blue-600 -ml-4"
                 >
+                  <FaDeviantart className="lg:text-4xl text-xl text-blue-600" />{" "}
                   Artifacts<span className="text-gray-800">Tracker</span>
                 </Link>
               </div>
@@ -154,7 +156,7 @@ const Header = () => {
               <details className="dropdown">
                 <summary className="btn m-1 bg-transparent border-none hover:bg-transparent shadow-none">
                   <div
-                    className="dropdown bg-white/70 rounded-full tooltip tooltip-bottom"
+                    className="dropdown bg-white/70 rounded-full  border-2 tooltip tooltip-bottom"
                     data-tooltip-id="my-tooltip"
                   >
                     <img
@@ -162,7 +164,7 @@ const Header = () => {
                         user.photoURL ||
                         "https://avatars.githubusercontent.com/u/80270685?v=4"
                       }
-                      className="lg:w-14 w-14  rounded-full  p-1"
+                      className="lg:w-14 w-14  rounded-full  border  p-1"
                       alt=""
                     />
                   </div>
