@@ -1,42 +1,29 @@
+import { Link } from "react-router-dom";
+import { FaDeviantart } from "react-icons/fa";
+
 const Footer = () => {
   return (
     <div className="bg-gray-900 text-white px-4 py-16 mx-auto  md:px-24 lg:px-8 pt-20">
       <div className="w-11/12 lg:w-11/12 md:w-11/12 xl:container  mx-auto">
         <div className="grid gap-10 row-gap-10 mb-8 lg:grid-cols-6">
           <div className="md:max-w-md lg:col-span-2">
-            <a
-              href="/"
-              aria-label="Go home"
-              title="Company"
-              className="inline-flex items-center"
-            >
-              <svg
-                className="w-8 text-teal-400"
-                viewBox="0 0 24 24"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeMiterlimit="10"
-                stroke="currentColor"
-                fill="none"
+            <div className="flex items-center space-x-4">
+              <Link
+                to="/"
+                className="flex items-center lg:text-3xl text-xl font-extrabold text-blue-600 -ml-4"
               >
-                <rect x="3" y="1" width="7" height="12" />
-                <rect x="3" y="17" width="7" height="6" />
-                <rect x="14" y="1" width="7" height="6" />
-                <rect x="14" y="11" width="7" height="12" />
-              </svg>
-              <span className="ml-2 text-xl font-bold tracking-wide uppercase">
-                Company
-              </span>
-            </a>
+                <FaDeviantart className="lg:text-4xl text-xl text-blue-600" />{" "}
+                Artifacts<span className="text-gray-100">Tracker</span>
+              </Link>
+            </div>
             <div className="mt-4 text-gray-400">
               <p className="text-sm">
-                We deliver world-class solutions to help businesses grow and
-                achieve their goals.
+                Explore artifacts from all around the world and discover the
+                stories behind them. Join our community and contribute to the
+                preservation of history.
               </p>
               <p className="mt-4 text-sm">
-                Join us in creating a better future with innovative technology
-                and services.
+                Start Exploring history of the world in one place.
               </p>
             </div>
           </div>
@@ -46,7 +33,7 @@ const Footer = () => {
               <ul className="mt-2 space-y-2">
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
                     About Us
@@ -54,7 +41,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
                     Careers
@@ -62,7 +49,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
                     Blog
@@ -70,7 +57,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
                     Contact
@@ -83,34 +70,34 @@ const Footer = () => {
               <ul className="mt-2 space-y-2">
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
-                    Web Development
+                    Explore Artifacts
                   </a>
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
-                    App Design
+                    All Artifacts
                   </a>
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
-                    Marketing
+                    Liked Artifacts
                   </a>
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
-                    SEO
+                    My Artifacts
                   </a>
                 </li>
               </ul>
@@ -120,26 +107,26 @@ const Footer = () => {
               <ul className="mt-2 space-y-2">
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
-                    Documentation
+                    Add Artifact
                   </a>
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
-                    Tutorials
+                    My Profile
                   </a>
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
-                    Support
+                    Login
                   </a>
                 </li>
               </ul>
@@ -149,7 +136,7 @@ const Footer = () => {
               <ul className="mt-2 space-y-2">
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
                     Facebook
@@ -157,7 +144,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
                     Twitter
@@ -165,7 +152,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
                     Instagram
@@ -173,7 +160,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="#"
                     className="transition-colors duration-300 hover:text-teal-400"
                   >
                     LinkedIn
@@ -185,11 +172,20 @@ const Footer = () => {
         </div>
         <div className="flex flex-col justify-between pt-5 border-t border-gray-700 sm:flex-row">
           <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} Company Name. All rights reserved.
+            © {new Date().getFullYear()} Artifacts Tracker. All rights reserved.
+            <br />
+            Designed by{" "}
+            <a
+              target="_blank"
+              href="https://www.mdranju.xyz"
+              className="text-blue-400"
+            >
+              Md Ranju
+            </a>
           </p>
           <div className="flex items-center mt-4 space-x-4 sm:mt-0">
             <a
-              href="/"
+              href="#"
               className="text-gray-500 transition-colors duration-300 hover:text-teal-400"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="h-5">
@@ -197,7 +193,7 @@ const Footer = () => {
               </svg>
             </a>
             <a
-              href="/"
+              href="#"
               className="text-gray-500 transition-colors duration-300 hover:text-teal-400"
             >
               <svg viewBox="0 0 30 30" fill="currentColor" className="h-6">
@@ -206,7 +202,7 @@ const Footer = () => {
               </svg>
             </a>
             <a
-              href="/"
+              href="#"
               className="text-gray-500 transition-colors duration-300 hover:text-teal-400"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="h-5">
