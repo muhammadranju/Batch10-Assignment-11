@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const AddArtifact = () => {
-  const { user } = useContext(AuthContext);
+  const { user, setLoading } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -28,6 +28,7 @@ const AddArtifact = () => {
   };
 
   const handleSubmit = async (e) => {
+    // setLoading(true);
     e.preventDefault();
     // Validation (e.g., check if fields are filled, valid URL for image)
     const {
@@ -70,7 +71,9 @@ const AddArtifact = () => {
       if (sendData.ok) {
         Swal("Success", "Artifact added successfully!", "success");
         navigate("/artifacts");
+        setLoading(false);
       } else {
+        setLoading(false);
         Swal(
           `Error: ${data.message}`,
           "Failed to add artifact. Please try again.",
@@ -78,6 +81,7 @@ const AddArtifact = () => {
         );
       }
     } catch (error) {
+      setLoading(false);
       Swal(
         `Error: ${error.message}`,
         "Failed to add artifact. Please try again.",
@@ -161,7 +165,6 @@ const AddArtifact = () => {
             <option value="Treasure">Treasure</option>
             <option value="Helmet">Helmet</option>
             <option value="Statue">Statue</option>
-            {/* Add more options as needed */}
           </select>
         </div>
 

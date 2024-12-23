@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { CardsSkeleton2 } from "../../components/CardsSkeleton/CardsSkeleton";
 
 const LikedArtifacts = () => {
   const [likedArtifacts, setLikedArtifacts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   // Dummy Data for Liked Artifacts
   // const likedArtifacts = [
@@ -49,6 +51,7 @@ const LikedArtifacts = () => {
 
   useEffect(() => {
     const getLikedArtifacts = async () => {
+      setLoading(true);
       const response = await fetch(
         `${
           import.meta.env.VITE_BackendURL
@@ -63,6 +66,7 @@ const LikedArtifacts = () => {
       const data = await response.json();
       console.log(data);
       setLikedArtifacts(data.artifacts);
+      setLoading(false);
     };
     getLikedArtifacts();
   }, []);
@@ -78,35 +82,58 @@ const LikedArtifacts = () => {
 
       {/* Artifacts Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {likedArtifacts?.map((artifact) => (
-          <div
-            key={artifact.id}
-            className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105"
-          >
-            <img
-              src={artifact.imageUrl}
-              alt={artifact.artifactName}
-              className="w-full h-64 object-cover"
-            />
-            <div className="p-4 space-y-2">
-              <h3 className="text-xl font-semibold text-gray-800">
-                {artifact.artifactName}
-              </h3>
-              <p className="text-gray-600 mt-2">
-                {artifact.historicalContext.length > 50
-                  ? artifact.historicalContext.slice(0, 80) + "..."
-                  : artifact.historicalContext}
-              </p>
-              <button
-                onClick={() => navigate(`/artifact/${artifact.slug}`)}
-                className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-3 rounded-md hover:opacity-90  "
+        {loading ? (
+          <>
+            <CardsSkeleton2 />
+            <CardsSkeleton2 />
+            <CardsSkeleton2 />
+            <CardsSkeleton2 />
+            <CardsSkeleton2 />
+            <CardsSkeleton2 />
+            <CardsSkeleton2 />
+            <CardsSkeleton2 />
+          </>
+        ) : (
+          <>
+            {likedArtifacts?.map((artifact) => (
+              <div
+                key={artifact.id}
+                className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105"
               >
-                View Details
-              </button>
-            </div>
-          </div>
-        ))}
+                <img
+                  src={artifact.imageUrl}
+                  alt={artifact.artifactName}
+                  className="w-full h-64 object-cover"
+                />
+                <div className="p-4 space-y-2">
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    {artifact.artifactName}
+                  </h3>
+                  <p className="text-gray-600 mt-2">
+                    {artifact.historicalContext.length > 50
+                      ? artifact.historicalContext.slice(0, 100) + "..."
+                      : artifact.historicalContext}
+                  </p>
+                  <button
+                    onClick={() => navigate(`/artifact/${artifact.slug}`)}
+                    className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-3 rounded-md hover:opacity-90  "
+                  >
+                    View Details
+                  </button>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
+      {likedArtifacts?.length === 0 ? (
+        <div className="text-center text-xl text-gray-600">
+          You don&apos;t have any liked artifacts yet. You can like artifacts
+          from the featured artifacts section.
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
