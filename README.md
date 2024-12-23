@@ -1,4 +1,6 @@
-## Title: The Artifacts Tracker Frontend
+## Title: The Historical Artifacts Tracker Frontend
+
+### Category: Assignment Category - 13
 
 ## Description:
 
@@ -24,6 +26,11 @@ This is the frontend for the Artifacts Tracker application. It is built using Re
 ## Purpose:
 
 The purpose of this project is to provide a user-friendly interface for managing artifacts. It allows users to create, view, and manage their artifacts, as well as like and unlike them. The application also includes features for user authentication and authorization.
+
+## Website Links:
+
+- Frontend: https://react-artifacts-tracker.web.app
+- Backend: https://backend-artifacts.vercel.app
 
 ## Screenshots:
 
