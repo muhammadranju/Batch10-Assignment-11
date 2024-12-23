@@ -5,9 +5,12 @@ import { IoMdClose } from "react-icons/io";
 import { Helmet } from "react-helmet";
 import Cookies from "js-cookie";
 import { AuthContext } from "../../context/AuthProvider";
+import { CardsSkeleton3 } from "../../components/CardsSkeleton/CardsSkeleton";
+import { SlLike } from "react-icons/sl";
 
 const MyArtifacts = () => {
   const { user, setRefetch, setLoading } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Dummy Data for Artifacts added by the logged-in user
   const [userArtifacts, setUserArtifacts] = useState([]);
@@ -27,6 +30,7 @@ const MyArtifacts = () => {
 
   useEffect(() => {
     const getArtifacts = async () => {
+      setIsLoading(true);
       const response = await fetch(
         `${
           import.meta.env.VITE_BackendURL
@@ -40,6 +44,7 @@ const MyArtifacts = () => {
       );
       const data = await response.json();
       setUserArtifacts(data.data);
+      setIsLoading(false);
     };
     getArtifacts();
     setRefetch(Date.now());
@@ -174,63 +179,74 @@ const MyArtifacts = () => {
       </h1>
 
       {/* Check if user has any artifacts */}
-      {userArtifacts?.length === 0 ? (
-        <div className="text-center text-xl text-gray-600">
-          You don&apos;t have any artifacts yet. Add some artifacts to your
-          collection!
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 h-full">
-          {userArtifacts?.map((artifact) => (
-            <div
-              key={artifact._id}
-              className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 h-full"
-            >
-              <img
-                src={artifact.imageUrl}
-                alt={artifact.artifactName}
-                className="w-full h-64 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-xl font-semibold text-gray-800">
-                  {artifact.artifactName}
-                </h3>
-                <p className="text-gray-600 mt-2">
-                  Type: {artifact.artifactType}
-                </p>
-                <p className="text-gray-600 mt-2">
-                  Created At: {artifact.createdAt}
-                </p>
-                <p className="text-gray-600 mt-2">
-                  Discovered At: {artifact.discoveredAt}
-                </p>
-                <p className="text-gray-600 mt-2">
-                  Discovered By: {artifact.discoveredBy}
-                </p>
-                <p className="text-gray-600 mt-2">Likes: {artifact.likes}</p>
 
-                <div className="flex justify-between items-center mt-4 ">
-                  {/* Update Button */}
-                  <button
-                    onClick={() => handleUpdateClick(artifact)}
-                    className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-3 rounded-md hover:opacity-90"
-                  >
-                    Update
-                  </button>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 h-full">
+        {isLoading ? (
+          <>
+            <CardsSkeleton3 />
+            <CardsSkeleton3 />
+            <CardsSkeleton3 />
+            <CardsSkeleton3 />
+            <CardsSkeleton3 />
+            <CardsSkeleton3 />
+            <CardsSkeleton3 />
+            <CardsSkeleton3 />
+          </>
+        ) : (
+          <>
+            {userArtifacts?.map((artifact) => (
+              <div
+                key={artifact._id}
+                className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 h-full"
+              >
+                <img
+                  src={artifact.imageUrl}
+                  alt={artifact.artifactName}
+                  className="w-full h-64 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    {artifact.artifactName}
+                  </h3>
+                  <p className="text-gray-600 mt-2">
+                    Type: {artifact.artifactType}
+                  </p>
+                  <p className="text-gray-600 mt-2">
+                    Created At: {artifact.createdAt}
+                  </p>
+                  <p className="text-gray-600 mt-2">
+                    Discovered At: {artifact.discoveredAt}
+                  </p>
+                  <p className="text-gray-600 mt-2">
+                    Discovered By: {artifact.discoveredBy}
+                  </p>
+                  <p className="text-gray-600 mt-2 flex items-center gap-x-2">
+                    <SlLike /> {artifact.likes}
+                  </p>
 
-                  {/* Delete Button */}
-                  <button
-                    onClick={() => handleDeleteClick(artifact.slug)}
-                    className="bg-gradient-to-r from-red-500 to-red-800 text-white px-4 py-3 rounded-md hover:opacity-90"
-                  >
-                    Delete
-                  </button>
+                  <div className="flex justify-between items-center mt-4 ">
+                    {/* Update Button */}
+                    <button
+                      onClick={() => handleUpdateClick(artifact)}
+                      className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-3 rounded-md hover:opacity-90"
+                    >
+                      Update
+                    </button>
+
+                    {/* Delete Button */}
+                    <button
+                      onClick={() => handleDeleteClick(artifact.slug)}
+                      className="bg-gradient-to-r from-red-500 to-red-800 text-white px-4 py-3 rounded-md hover:opacity-90"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </>
+        )}
+      </div>
 
       {/* Modal for Update Artifact */}
       {isModalOpen && (
@@ -275,9 +291,9 @@ const MyArtifacts = () => {
                 Artifact Image (valid URL)
               </label>
               <textarea
-                type="url"
-                id="imageUrl"
-                name="imageUrl"
+                type="text"
+                id="historicalContext"
+                name="historicalContext"
                 value={updatedData.historicalContext}
                 onChange={handleInputChange}
                 cols={40}
@@ -295,10 +311,23 @@ const MyArtifacts = () => {
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded mb-4"
               >
-                <option value="Weapon">Weapon</option>
-                <option value="Document">Document</option>
-                <option value="Tool">Tool</option>
-                <option value="Writing">Writing</option>
+                <option value="Tools">Tools</option>
+                <option value="Weapons">Weapons</option>
+                <option value="Documents">Documents</option>
+                <option value="Writings">Writings</option>
+                <option value="Statue">Statue</option>
+                <option value="Sculpture">Sculpture</option>
+                <option value="Stone Tablet">Stone Tablet</option>
+                <option value="Painting">Painting</option>
+                <option value="Mask">Mask</option>
+                <option value="Cup">Cup</option>
+                <option value="Textile">Textile</option>
+                <option value="Architecture">Architecture</option>
+                <option value="Religious Cloth">Religious Cloth</option>
+                <option value="Art">Art</option>
+                <option value="Treasure">Treasure</option>
+                <option value="Helmet">Helmet</option>
+                <option value="Statue">Statue</option>
                 {/* Add more options as needed */}
               </select>
               <div className="flex justify-between items-center gap-x-5">
@@ -395,6 +424,14 @@ const MyArtifacts = () => {
             </button>
           </div>
         </div>
+      )}
+      {userArtifacts?.length === 0 ? (
+        <div className="text-center text-xl text-gray-600">
+          You don&apos;t have any artifacts yet. Add some artifacts to your
+          collection!
+        </div>
+      ) : (
+        ""
       )}
     </div>
   );
