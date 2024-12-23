@@ -1,8 +1,31 @@
-# React + Vite
+## Title: The Artifacts Tracker Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description:
 
-Currently, two official plugins are available:
+This is the frontend for the Artifacts Tracker application. It is built using React and Tailwind CSS. The application allows users to create, view, and manage their artifacts. It also includes features for user authentication and authorization.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features:
+
+- User authentication and authorization
+- CRUD operations for artifacts
+- Pagination and search functionality
+- User-specific artifact lists
+- Like/unlike functionality for artifacts
+- Artifact discovery and discovery by date
+
+## Technologies:
+
+- React
+- Tailwind CSS
+- Firebase
+- Cookies
+- Swal
+
+## Purpose:
+
+The purpose of this project is to provide a user-friendly interface for managing artifacts. It allows users to create, view, and manage their artifacts, as well as like and unlike them. The application also includes features for user authentication and authorization.
+
+## Screenshots:
+
+![Screenshot 1](./public/home.jpeg)
+![Screenshot 2](./public/home-2.jpeg)
