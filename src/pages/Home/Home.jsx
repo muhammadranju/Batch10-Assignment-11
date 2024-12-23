@@ -4,6 +4,8 @@ import HeroSection from "../../components/HeroSection/HeroSection";
 import { AuthContext } from "../../context/AuthProvider";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { HeroSectionBottom } from "../../components/HeroSection/HeroSectionBottom";
+import { Newsletter } from "../../components/HeroSection/Newsletter";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
@@ -18,35 +20,11 @@ const Home = () => {
       <ArtifactCards />
 
       {/* Join Community Section */}
-      <section className="bg-gradient-to-r from-yellow-100 via-pink-50 to-yellow-100 py-28">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-6">
-            Join Our Community
-          </h2>
-          <p className="text-gray-700 mb-8">
-            Connect with like-minded enthusiasts and contribute to the
-            preservation of history.
-          </p>
-          <Link
-            to={user ? "/artifacts" : "/register"}
-            className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-8 py-3 rounded-lg shadow-lg hover:opacity-90"
-          >
-            {user ? "Explore Artifacts" : "Register Now"}
-          </Link>
-        </div>
-      </section>
-
-      {/* Mission Statement Section */}
-      <section className="my-28 ">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-6">
-            Our Mission
-          </h2>
-          <p className="text-gray-600 text-lg">
-            Our mission is to bring history closer to you by creating a platform
-            that preserves and shares the stories behind historical artifacts.
-          </p>
-        </div>
+      <div className="mb-20">
+        <HeroSectionBottom />
+      </div>
+      <section className="bg-gradient-to-r from-yellow-100 via-pink-50 to-yellow-100 pb-10">
+        <Newsletter />
       </section>
     </>
   );
