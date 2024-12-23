@@ -7,10 +7,12 @@ import Cookies from "js-cookie";
 import { AuthContext } from "../../context/AuthProvider";
 import { CardsSkeleton3 } from "../../components/CardsSkeleton/CardsSkeleton";
 import { SlLike } from "react-icons/sl";
+import { useNavigate } from "react-router-dom";
 
 const MyArtifacts = () => {
   const { user, setRefetch, setLoading } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   // Dummy Data for Artifacts added by the logged-in user
   const [userArtifacts, setUserArtifacts] = useState([]);
@@ -69,7 +71,7 @@ const MyArtifacts = () => {
     }).then(async (willDelete) => {
       try {
         if (willDelete) {
-          setLoading(true);
+          // setLoading(true);
           const sendDeleteRequest = await fetch(
             `${import.meta.env.VITE_BackendURL}/api/artifacts/${artifactId}`,
             {
@@ -89,7 +91,11 @@ const MyArtifacts = () => {
         } else {
           Swal("Cancelled", "Your artifact has not been deleted.", "error");
         }
-        setLoading(false);
+        // setLoading(false);
+
+        if (!isLoading) {
+          navigate("/artifacts");
+        }
       } catch (error) {
         console.log(error);
       }
@@ -251,7 +257,7 @@ const MyArtifacts = () => {
       {/* Modal for Update Artifact */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-[30%]">
+          <div className="bg-white rounded-lg shadow-lg p-6 lg:w-[30%] w-[95%]">
             <div className="flex justify-between items-center ">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                 Update Artifact

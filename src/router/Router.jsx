@@ -9,6 +9,7 @@ import LikedArtifacts from "../pages/LikedArtifacts/LikedArtifacts";
 import MyArtifacts from "../pages/MyArtifacts/MyArtifacts";
 import AddArtifacts from "../pages/AddArtifacts/AddArtifacts";
 import PrivateRoutes from "./PrivateRoute";
+import NotFound from "../pages/NotFound/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -65,7 +66,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <div>404</div>,
+        element: <NotFound />,
       },
     ],
   },

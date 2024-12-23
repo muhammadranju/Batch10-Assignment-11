@@ -39,26 +39,26 @@ const AllArtifacts = () => {
       <Helmet>
         <title>All Artifact Page | Historical Artifacts</title>
       </Helmet>
-      <div className="py-16 px-6">
+      <div className="py-16 lg:px-6 px-3">
         <div className="w-11/12 lg:w-11/12 md:w-11/12 xl:container  mx-auto">
           <h1 className="text-4xl font-extrabold text-gray-900 text-center">
             All Artifacts
           </h1>
           {/* Search and Filter */}
-          <div className="mt-8 mb-12 flex justify-center items-center w-1/2 mx-auto">
+          <div className="mt-8 mb-12 flex justify-center items-center lg:w-1/2 mx-auto">
             <label className="input input-bordered flex items-center gap-2">
               <HiSearch />
               <input
                 type="text"
                 onChange={handleSearch}
-                className="grow w-full"
+                className="w-full"
                 placeholder="Search Artifacts..."
               />
             </label>
           </div>
 
           {/* Artifacts Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-5">
             {loading ? (
               <>
                 <CardsSkeleton2 />
