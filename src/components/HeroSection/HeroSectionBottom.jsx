@@ -14,7 +14,7 @@ export const HeroSectionBottom = () => {
         </svg>
         <img
           className="object-cover w-full h-56 rounded shadow-lg lg:rounded-none lg:shadow-none md:h-64 lg:h-fit"
-          src="https://cdn-imgix.headout.com/media/images/e23afa57b92ab5de13be28e642beed1a-20598-cairo-the-best-tour-to-pyramids---the-egyptian-museum---the-bazar-01.jpg"
+          src="/images/pyramids.jpg"
           alt=""
         />
       </div>

@@ -27,7 +27,7 @@ const HeroSection = () => {
           </div>
           <div className="lg:w-1/2 my-8 lg:mt-0">
             <img
-              src="https://www.artlex.com/wp-content/uploads/2022/11/Phaistos-Disc.jpg"
+              src="/images/Phaistos-Disc.jpg"
               alt="Hero Image"
               className="rounded-lg shadow-lg mx-auto w-full"
             />

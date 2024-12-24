@@ -67,8 +67,6 @@ const AllArtifacts = () => {
                 <CardsSkeleton2 />
                 <CardsSkeleton2 />
                 <CardsSkeleton2 />
-                <CardsSkeleton2 />
-                <CardsSkeleton2 />
               </>
             ) : (
               <>

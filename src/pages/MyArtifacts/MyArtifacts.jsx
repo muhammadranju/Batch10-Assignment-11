@@ -433,8 +433,11 @@ const MyArtifacts = () => {
       )}
       {userArtifacts?.length === 0 ? (
         <div className="text-center text-xl text-gray-600">
-          You don&apos;t have any artifacts yet. Add some artifacts to your
-          collection!
+          <img src="/Blogging-bro.svg" className="lg:w-[40%] mx-auto" />
+          <p className="text-gray-600 lg:w-[30%] mx-auto mt-2">
+            You don&apos;t have any artifacts yet. Add some artifacts to your
+            collection!
+          </p>
         </div>
       ) : (
         ""

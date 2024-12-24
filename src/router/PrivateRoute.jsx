@@ -3,10 +3,14 @@ import { Navigate, useLocation } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import { AuthContext } from "../context/AuthProvider";
 
+import Cookies from "js-cookie";
+
 /* eslint-disable react/prop-types */
 const PrivateRoutes = ({ children }) => {
-  const { user, loading } = useContext(AuthContext);
+  const { user, loading, signOut } = useContext(AuthContext);
   const location = useLocation();
+
+  const token = Cookies.get("token");
 
   if (loading)
     return (
@@ -24,7 +28,13 @@ const PrivateRoutes = ({ children }) => {
       </div>
     );
 
+  console.log();
+
   console.log(user);
+
+  if (!token) {
+    signOut();
+  }
 
   if (!user) {
     return <Navigate state={location.pathname} to="/login" replace={true} />;

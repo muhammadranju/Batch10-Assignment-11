@@ -5,6 +5,7 @@ import Swal from "sweetalert"; // For SweetAlert
 import { Tooltip } from "react-tooltip";
 import { AuthContext } from "../../context/AuthProvider";
 import { FaDeviantart } from "react-icons/fa";
+import { IoIosLogOut } from "react-icons/io";
 
 const Header = () => {
   const { user, signOut } = useContext(AuthContext);
@@ -21,7 +22,7 @@ const Header = () => {
 
   return (
     <header className="shadow-md sticky top-0 z-50 backdrop-blur-md bg-opacity-70 bg-white/70">
-      <nav className="w-11/12 lg:w-11/12 md:w-11/12 xl:container mx-auto flex justify-between items-center lg:py-2   ">
+      <nav className="w-11/12 lg:w-11/12 md:w-11/12 xl:container mx-auto flex justify-between items-center lg:pt-1   ">
         <div className="navbar ">
           <div className="navbar-start">
             <div className="dropdown">
@@ -155,37 +156,43 @@ const Header = () => {
             {user ? (
               <details className="dropdown">
                 <summary className="btn m-1 bg-transparent border-none hover:bg-transparent shadow-none">
-                  <div
-                    className="dropdown bg-white/70 rounded-full  border-2 tooltip tooltip-bottom"
-                    data-tooltip-id="my-tooltip"
-                  >
-                    <img
-                      src={
-                        user.photoURL ||
-                        "https://avatars.githubusercontent.com/u/80270685?v=4"
-                      }
-                      className="lg:w-14 w-14  rounded-full  border  p-1"
-                      alt=""
-                    />
+                  <div className="flex items-center justify-start space-x-1">
+                    <div
+                      className="dropdown bg-white/70 rounded-full  border-2 tooltip tooltip-bottom"
+                      data-tooltip-id="my-tooltip"
+                    >
+                      <img
+                        src={
+                          user.photoURL ||
+                          "https://avatars.githubusercontent.com/u/80270685?v=4"
+                        }
+                        className="lg:w-12 w-14  rounded-full    p-1"
+                        alt=""
+                      />
+                    </div>
+                    <div className="text-start lg:flex flex-col hidden">
+                      <p className="text-base ">
+                        {user.displayName || "User Name"}
+                      </p>
+                      <span className="text-xs">My Account</span>
+                    </div>
                   </div>
-                  <Tooltip id="my-tooltip">
-                    <h3 className="text-lg font-semibold text-gray-100">
-                      {user.displayName || "User Name"}
-                    </h3>
-                    <p className="mt-1">Click to open menu</p>
-                  </Tooltip>
+                  <div className="lg:block hidden">
+                    <Tooltip id="my-tooltip">
+                      <h3 className="text-lg font-semibold text-gray-100">
+                        {user.displayName || "User Name"}
+                      </h3>
+                      <p className="mt-1">Click to open menu</p>
+                    </Tooltip>
+                  </div>
                 </summary>
-                <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] lg:-ml-20 -ml-28 w-52 p-2 shadow">
-                  <li className="text-gray-700 hover:text-blue-600 font-medium text-center">
-                    <p className="text-center lg:text-lg font-semibold hover:bg-transparent">
-                      {user.displayName || "User Name"}
-                    </p>
-                  </li>
+                <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] lg:-ml-10 -ml-12 w-auto p-2 shadow">
                   <li>
                     <button
                       onClick={handleLogout}
-                      className="btn mt-1 bg-red-500 text-white hover:bg-red-700 "
+                      className="btn mt-1 bg-red-600 text-white hover:bg-red-700 "
                     >
+                      <IoIosLogOut className="text-xl font-bold" />
                       Log Out
                     </button>
                   </li>
