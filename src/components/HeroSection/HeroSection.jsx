@@ -4,7 +4,7 @@ const HeroSection = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white">
+      <section className="lg:bg-gradient-to-b bg-gradient-to-b from-blue-600 via-indigo-600 to-purple-600 text-white">
         <div className="w-11/12 lg:w-11/12 md:w-11/12 xl:container  mx-auto px-6 py-14 flex  lg:flex-row items-center flex-col-reverse">
           <div className="lg:w-1/2 text-center lg:text-left">
             <h1 className="lg:text-5xl md:text-3xl text-2xl font-extrabold mb-6 leading-tight">
