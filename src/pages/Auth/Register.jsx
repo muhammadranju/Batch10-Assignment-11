@@ -80,18 +80,24 @@ const RegisterPage = () => {
       setRefetch(Date.now());
       console.log(userData);
       if (userData) {
-        await fetch(`${import.meta.env.VITE_BackendURL}/api/auth/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: userData.user.displayName,
-            email: userData.user.email,
-            photoURL: userData.user.photoURL,
-          }),
-        });
-        navigate("/login");
+        const returnData = await fetch(
+          `${import.meta.env.VITE_BackendURL}/api/auth/register`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: userData.user.displayName,
+              email: userData.user.email,
+              photoURL: userData.user.photoURL,
+            }),
+          }
+        );
+        const data = await returnData.json();
+        Cookies.set("token", data?.token, { expires: 15 });
+        console.log(data);
+        navigate("/");
         setLoading(false);
         toast.success("User Created Successfully!");
       }
